@@ -1,0 +1,112 @@
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Articles Management</h6>
+            <a href="/admin/articles/create" class="btn btn-primary">
+                <i class="fa fa-plus me-2"></i>Add New Article
+            </a>
+        </div>
+        
+        <!-- Success Message -->
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fa fa-check-circle me-2"></i><%= success %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } %>
+        
+        <!-- Error Message -->
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fa fa-exclamation-circle me-2"></i><%= error %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } %>
+        
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Views</th>
+                        <th scope="col">Created</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (articles && articles.length > 0) { %>
+                        <% for(var i = 0; i < articles.length; i++) { 
+                            var article = articles[i];
+                        %>
+                        <tr>
+                            <td><%= article.id %></td>
+                            <td>
+                                <% if (article.images && article.images.length > 0) { %>
+                                    <img src="<%= article.images[0].url %>" alt="Article" 
+                                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                <% } else { %>
+                                    <span class="text-muted">No image</span>
+                                <% } %>
+                            </td>
+                            <td><%= article.title %></td>
+                            <td>
+                                <span class="badge bg-<%= article.role === 'admin' ? 'danger' : (article.role === 'editor' ? 'info' : 'secondary') %>">
+                                    <%= article.role %>
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge bg-<%= article.isPublished ? 'success' : 'warning' %>">
+                                    <%= article.isPublished ? 'Published' : 'Draft' %>
+                                </span>
+                                <% if (article.publishedAt) { %>
+                                    <br><small><%= new Date(article.publishedAt).toLocaleDateString() %></small>
+                                <% } %>
+                            </td>
+                            <td><%= article.views %></td>
+                            <td><%= new Date(article.createdAt).toLocaleDateString() %></td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a class="btn btn-sm btn-info" href="/admin/articles/view/<%= article.id %>" title="View">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-warning" href="/admin/articles/edit/<%= article.id %>" title="Edit">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <form action="/admin/articles/delete/<%= article.id %>" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Delete" 
+                                                onclick="return confirm('Are you sure you want to delete this article?')">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <% } %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <i class="fa fa-newspaper fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">No articles found. Click "Add New Article" to create one.</p>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-hide alerts after 5 seconds
+setTimeout(function() {
+    var alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+        var bsAlert = new bootstrap.Alert(alert);
+        bsAlert.close();
+    });
+}, 5000);
+</script>

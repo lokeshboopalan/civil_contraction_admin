@@ -1,0 +1,10 @@
+<%- include('../layouts/admin-users', { 
+    title: isEdit ? 'Edit Article' : 'Create Article',
+    currentPage: 'articles',
+    user: typeof user !== 'undefined' ? user : null,
+    body: include('../partials/article-form-content', { 
+        isEdit: isEdit,
+        articleData: articleData,
+        error: typeof error !== 'undefined' ? error : null
+    })
+}) %>

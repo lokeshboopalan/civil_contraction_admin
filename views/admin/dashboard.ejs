@@ -1,0 +1,9 @@
+<%- include('../layouts/admin-simple', { 
+    title: 'Dashboard',
+    currentPage: 'dashboard',
+    user: typeof user !== 'undefined' ? user : null,
+    stats: typeof stats !== 'undefined' ? stats : null,
+    recentSales: typeof recentSales !== 'undefined' ? recentSales : null
+}) %>
+
+<!-- The rest of your dashboard content remains the same -->

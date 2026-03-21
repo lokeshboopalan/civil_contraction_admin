@@ -1,0 +1,67 @@
+<!-- Sidebar Start -->
+<div class="sidebar pe-4 pb-3">
+    <nav class="navbar bg-light navbar-light">
+        <a href="/admin/dashboard" class="navbar-brand mx-4 mb-3">
+            <div class="position-relative d-flex align-items-center">
+                <img class="rounded-circle me-2" src="/img/Thirupathi_Logo.png" alt="Logo" 
+                     style="width: 45px; height: 45px; object-fit: cover;">
+                <span class="fw-bold thiru-logo">THIRUPATHI</span>
+            </div>
+        </a>
+       <div class="d-flex align-items-center ms-4 mb-4">
+            <div class="position-relative">
+                <img class="rounded-circle" 
+                     src="<%= locals.user?.avatar || user?.avatar || '/img/user.jpg' %>" 
+                     alt="" 
+                     style="width: 40px; height: 40px; object-fit: cover;">
+                <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+            </div>
+            <div class="ms-3">
+                <h6 class="mb-0"><%= locals.user?.name || user?.name || 'John Doe' %></h6>
+                <span><%= locals.user?.role || user?.role || 'Admin' %></span>
+            </div>
+        </div>
+        <div class="navbar-nav w-100">
+            <a href="/admin/dashboard" class="nav-item nav-link <%= currentPage === 'dashboard' ? 'active' : '' %>">
+                <i class="fa fa-tachometer-alt me-2"></i>Dashboard
+            </a>
+            <a href="/admin/projects/list" class="nav-item nav-link <%= currentPage === 'projects' ? 'active' : '' %>">
+                <i class="fa fa-project-diagram me-2"></i>Projects
+            </a>
+            <a href="/admin/feature-projects" class="nav-item nav-link <%= currentPage === 'feature-projects' ? 'active' : '' %>">
+                <i class="fa fa-star me-2"></i>Feature Projects
+            </a>
+            <a href="/admin/services" class="nav-item nav-link <%= currentPage === 'services' ? 'active' : '' %>">
+                <i class="fa fa-cogs me-2"></i>Services
+            </a>
+            <a href="/admin/about" class="nav-item nav-link <%= currentPage === 'about' ? 'active' : '' %>">
+                <i class="fa fa-info-circle me-2"></i>About
+            </a>
+            <a href="/admin/sliders" class="nav-item nav-link <%= currentPage === 'sliders' ? 'active' : '' %>">
+                <i class="fa fa-image me-2"></i>Sliders
+            </a>
+            <a href="/admin/articles" class="nav-item nav-link <%= currentPage === 'articles' ? 'active' : '' %>">
+                <i class="fa fa-newspaper me-2"></i>Articles
+            </a>
+        </div>
+    </nav>
+</div>
+<!-- Sidebar End -->
+
+<style>
+.thiru-logo {
+    font-size: 22px;
+    letter-spacing: 2px;
+    font-weight: 800;
+    background: linear-gradient(45deg, #0d6efd, #ffc107);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: 0.3s ease;
+}
+
+.thiru-logo:hover {
+    transform: scale(1.1);
+    text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+</style>

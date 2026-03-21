@@ -1,0 +1,9 @@
+<%- include('../layouts/admin-users', { 
+    title: 'View Feature Project',
+    currentPage: 'feature-projects',
+    user: typeof user !== 'undefined' ? user : null,
+    body: include('../partials/feature-project-view-content', { 
+        projectData: projectData,
+        error: typeof error !== 'undefined' ? error : null
+    })
+}) %>

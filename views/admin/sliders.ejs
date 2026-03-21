@@ -1,0 +1,10 @@
+<%- include('../layouts/admin-users', { 
+    title: 'Sliders Management',
+    currentPage: 'sliders',
+    user: typeof user !== 'undefined' ? user : null,
+    body: include('../partials/sliders-content', { 
+        sliders: sliders,
+        success: typeof success !== 'undefined' ? success : null,
+        error: typeof error !== 'undefined' ? error : null
+    })
+}) %>

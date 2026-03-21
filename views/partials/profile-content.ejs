@@ -1,0 +1,144 @@
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <!-- Success/Error Messages -->
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="col-12">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fa fa-check-circle me-2"></i><%= success %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        <% } %>
+        
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="col-12">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fa fa-exclamation-circle me-2"></i><%= error %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        <% } %>
+
+        <!-- Profile Information -->
+        <div class="col-xl-4">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Profile Picture</h6>
+                <div class="text-center">
+                    <form action="/auth/profile/upload-avatar" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <img class="rounded-circle mb-3" 
+                                 src="<%= profile?.avatar || '/img/user.jpg' %>" 
+                                 alt="Profile" 
+                                 style="width: 150px; height: 150px; object-fit: cover;">
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control" type="file" name="avatar" accept="image/*" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fa fa-upload me-2"></i>Upload New Avatar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Details -->
+        <div class="col-xl-8">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Profile Information</h6>
+                
+                <form action="/auth/profile/update" method="POST">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" name="name" value="<%= profile?.name || '' %>" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" value="<%= profile?.email || '' %>" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control" name="phone" value="<%= profile?.phone || '' %>">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Role</label>
+                            <input type="text" class="form-control" value="<%= profile?.role || 'User' %>" readonly disabled>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-control" name="address" rows="2"><%= profile?.address || '' %></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Bio</label>
+                        <textarea class="form-control" name="bio" rows="3"><%= profile?.bio || '' %></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Member Since</label>
+                            <input type="text" class="form-control" 
+                                   value="<%= profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString() : '' %>" 
+                                   readonly disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Last Updated</label>
+                            <input type="text" class="form-control" 
+                                   value="<%= profile?.updatedAt ? new Date(profile.updatedAt).toLocaleDateString() : '' %>" 
+                                   readonly disabled>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">
+                        <i class="fa fa-save me-2"></i>Update Profile
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="col-12">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Change Password</h6>
+                
+                <form action="/auth/profile/change-password" method="POST">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Current Password</label>
+                            <input type="password" class="form-control" name="currentPassword" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">New Password</label>
+                            <input type="password" class="form-control" name="newPassword" required minlength="6">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control" name="confirmPassword" required minlength="6">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fa fa-key me-2"></i>Change Password
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-hide alerts after 5 seconds
+setTimeout(function() {
+    var alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+        var bsAlert = new bootstrap.Alert(alert);
+        bsAlert.close();
+    });
+}, 5000);
+</script>

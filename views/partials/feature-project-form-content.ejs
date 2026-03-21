@@ -1,0 +1,179 @@
+<div class="container-fluid pt-4 px-4">
+    <div class="row justify-content-center">
+        <div class="col-sm-12 col-xl-8">
+            <div class="bg-light rounded h-100 p-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h5 class="mb-0"><%= isEdit ? 'Edit Feature Project' : 'Create New Feature Project' %></h5>
+                    <a href="/admin/feature-projects" class="btn btn-sm btn-secondary">
+                        <i class="fa fa-arrow-left me-2"></i>Back
+                    </a>
+                </div>
+                
+                <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="alert alert-danger"><%= error %></div>
+                <% } %>
+                
+                <form action="<%= isEdit ? '/admin/feature-projects/update/' + projectData.id : '/admin/feature-projects' %>" 
+                      method="POST" 
+                      enctype="multipart/form-data">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Title <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="title" value="<%= projectData.title || '' %>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description <span class="text-danger">*</span></label>
+                        <textarea class="form-control" name="description" rows="6" required><%= projectData.description || '' %></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Location <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="location" value="<%= projectData.location || '' %>" required>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Start Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" name="startDate" value="<%= projectData.startDate || '' %>" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">End Date</label>
+                            <input type="date" class="form-control" name="endDate" value="<%= projectData.endDate || '' %>">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-control" name="status" required>
+                                <option value="ongoing" <%= projectData.status === 'ongoing' ? 'selected' : '' %>>Ongoing</option>
+                                <option value="completed" <%= projectData.status === 'completed' ? 'selected' : '' %>>Completed</option>
+                                <option value="upcoming" <%= projectData.status === 'upcoming' ? 'selected' : '' %>>Upcoming</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Active</label>
+                            <select class="form-control" name="isActive">
+                                <option value="true" <%= projectData.isActive !== false ? 'selected' : '' %>>Active</option>
+                                <option value="false" <%= projectData.isActive === false ? 'selected' : '' %>>Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Sort Order</label>
+                            <input type="number" class="form-control" name="sortOrder" value="<%= projectData.sortOrder || 0 %>" min="0">
+                            <small class="text-muted">Lower numbers appear first</small>
+                        </div>
+                    </div>
+
+                    <!-- Image Upload Section -->
+                    <div class="mb-3">
+                        <label for="formFileMultiple" class="form-label">Project Images</label>
+                        <input class="form-control" type="file" name="images" id="formFileMultiple" multiple accept="image/*">
+                        <small class="text-muted">You can select multiple images (JPG, PNG, GIF)</small>
+                        
+                        <!-- Image Preview Container -->
+                        <div class="image-preview mt-3" id="imagePreview" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+                        
+                        <!-- Existing Images (for edit mode) -->
+                        <% if (isEdit && projectData.images && projectData.images.length > 0) { %>
+                            <div class="existing-images mt-3">
+                                <label class="form-label fw-bold mt-3">Existing Images</label>
+                                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                    <% projectData.images.forEach(function(image) { %>
+                                        <div class="image-item" style="position: relative; margin-bottom: 10px;">
+                                            <img src="<%= image.url %>" alt="Project Image" 
+                                                 style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd;">
+                                            <button type="button" class="btn btn-sm btn-danger" 
+                                                    style="position: absolute; top: -8px; right: -8px; border-radius: 50%; width: 25px; height: 25px; padding: 0; display: flex; align-items: center; justify-content: center;"
+                                                    onclick="removeImage('<%= image.publicId %>', <%= projectData.id %>)">
+                                                <i class="fa fa-times" style="font-size: 12px;"></i>
+                                            </button>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa <%= isEdit ? 'fa-edit' : 'fa-plus' %> me-2"></i>
+                        <%= isEdit ? 'Update' : 'Create' %> Feature Project
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Image preview functionality
+document.getElementById('formFileMultiple')?.addEventListener('change', function(e) {
+    const preview = document.getElementById('imagePreview');
+    preview.innerHTML = '';
+    preview.style.display = 'flex';
+    
+    if (e.target.files.length > 0) {
+        for (let i = 0; i < e.target.files.length; i++) {
+            const file = e.target.files[i];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const imgContainer = document.createElement('div');
+                imgContainer.style.position = 'relative';
+                imgContainer.style.marginBottom = '10px';
+                
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '100px';
+                img.style.height = '100px';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '5px';
+                img.style.border = '1px solid #ddd';
+                
+                imgContainer.appendChild(img);
+                preview.appendChild(imgContainer);
+            }
+            
+            reader.readAsDataURL(file);
+        }
+    } else {
+        preview.style.display = 'none';
+    }
+});
+
+// Delete image function
+function removeImage(publicId, projectId) {
+    if (confirm('Are you sure you want to remove this image? This action cannot be undone.')) {
+        fetch('/admin/feature-projects/images/' + projectId + '/' + publicId, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success alert-dismissible fade show';
+                alertDiv.innerHTML = `
+                    <i class="fa fa-check-circle me-2"></i>Image deleted successfully
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.querySelector('.bg-light').prepend(alertDiv);
+                
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
+                response.json().then(data => {
+                    alert('Failed to delete image: ' + (data.error || 'Unknown error'));
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error deleting image: ' + error.message);
+        });
+    }
+}
+</script>

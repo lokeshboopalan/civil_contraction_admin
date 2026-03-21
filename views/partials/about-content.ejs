@@ -1,0 +1,277 @@
+<div class="container-fluid pt-4 px-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="bg-light rounded p-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h6 class="mb-0">About Information</h6>
+                    <a href="/admin/about/edit" class="btn btn-primary">
+                        <i class="fa fa-edit me-2"></i>Edit About
+                    </a>
+                </div>
+                
+                <!-- Success Message -->
+                <% if (typeof success !== 'undefined' && success) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fa fa-check-circle me-2"></i><%= success %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <% } %>
+                
+                <!-- Error Message -->
+                <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fa fa-exclamation-circle me-2"></i><%= error %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <% } %>
+                
+                <% if (about) { %>
+                    <!-- Images Gallery -->
+                    <% if (about.images && about.images.length > 0) { %>
+                        <div class="mb-4">
+                            <h6 class="mb-3">Images</h6>
+                            <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                                <% about.images.forEach(function(image) { %>
+                                    <div style="position: relative;">
+                                        <img src="<%= image.url %>" alt="About Image" 
+                                             style="width: 150px; height: 150px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd;">
+                                    </div>
+                                <% }); %>
+                            </div>
+                        </div>
+                        <hr>
+                    <% } %>
+
+                    <!-- Icon -->
+                    <% if (about.icon) { %>
+                        <div class="mb-3">
+                            <h6>Icon</h6>
+                            <i class="fa <%= about.icon %> fa-3x text-primary"></i>
+                        </div>
+                        <hr>
+                    <% } %>
+
+                    <!-- Title & Subtitle -->
+                    <div class="mb-3">
+                        <h6>Title</h6>
+                        <p class="fs-4"><%= about.title %></p>
+                    </div>
+
+                    <% if (about.subtitle) { %>
+                        <div class="mb-3">
+                            <h6>Subtitle</h6>
+                            <p class="fs-5 text-muted"><%= about.subtitle %></p>
+                        </div>
+                    <% } %>
+
+                    <hr>
+
+                    <!-- Descriptions -->
+                    <% if (about.shortDescription) { %>
+                        <div class="mb-3">
+                            <h6>Short Description</h6>
+                            <p><%= about.shortDescription %></p>
+                        </div>
+                    <% } %>
+
+                    <% if (about.longDescription) { %>
+                        <div class="mb-3">
+                            <h6>Long Description</h6>
+                            <p><%= about.longDescription %></p>
+                        </div>
+                    <% } %>
+
+                    <hr>
+
+                    <!-- Mission, Vision, Core Values -->
+                    <div class="row">
+                        <% if (about.missionStatement) { %>
+                            <div class="col-md-4 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title text-primary">
+                                            <i class="fa fa-bullseye me-2"></i>Mission
+                                        </h6>
+                                        <p class="card-text"><%= about.missionStatement %></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+
+                        <% if (about.visionStatement) { %>
+                            <div class="col-md-4 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title text-primary">
+                                            <i class="fa fa-eye me-2"></i>Vision
+                                        </h6>
+                                        <p class="card-text"><%= about.visionStatement %></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+
+                        <% if (about.coreValues) { %>
+                            <div class="col-md-4 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title text-primary">
+                                            <i class="fa fa-heart me-2"></i>Core Values
+                                        </h6>
+                                        <p class="card-text"><%= about.coreValues %></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <hr>
+
+                    <!-- Social Links -->
+                    <% if (about.socialLinks && about.socialLinks.length > 0) { %>
+                        <div class="mb-4">
+                            <h6 class="mb-3">Social Links</h6>
+                            <div class="d-flex gap-3">
+                                <% about.socialLinks.forEach(function(link) { %>
+                                    <% if (link.isActive) { %>
+                                        <a href="<%= link.url %>" target="_blank" class="btn btn-outline-primary" title="<%= link.platform %>">
+                                            <i class="fa <%= link.icon %>"></i>
+                                        </a>
+                                    <% } %>
+                                <% }); %>
+                            </div>
+                        </div>
+                        <hr>
+                    <% } %>
+
+                    <!-- Team Members -->
+                    <% if (about.teamMembers && about.teamMembers.length > 0) { %>
+                        <div class="mb-4">
+                            <h6 class="mb-3">Team Members</h6>
+                            <div class="row">
+                                <% about.teamMembers.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0)).forEach(function(member) { %>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card">
+                                            <% if (member.image) { %>
+                                                <img src="<%= member.image.url %>" class="card-img-top" alt="<%= member.name %>" 
+                                                     style="height: 200px; object-fit: cover;">
+                                            <% } %>
+                                            <div class="card-body">
+                                                <h6 class="card-title"><%= member.name %></h6>
+                                                <p class="card-text text-muted"><%= member.position %></p>
+                                                <% if (member.bio) { %>
+                                                    <p class="card-text small"><%= member.bio %></p>
+                                                <% } %>
+                                                <% if (member.socialLinks && member.socialLinks.length > 0) { %>
+                                                    <div class="d-flex gap-2 mt-2">
+                                                        <% member.socialLinks.forEach(function(link) { %>
+                                                            <% if (link.isActive) { %>
+                                                                <a href="<%= link.url %>" target="_blank" class="text-primary">
+                                                                    <i class="fa <%= link.icon %>"></i>
+                                                                </a>
+                                                            <% } %>
+                                                        <% }); %>
+                                                    </div>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        </div>
+                        <hr>
+                    <% } %>
+
+                    <!-- Milestones -->
+                    <% if (about.milestones && about.milestones.length > 0) { %>
+                        <div class="mb-4">
+                            <h6 class="mb-3">Company Milestones</h6>
+                            <div class="timeline">
+                                <% about.milestones.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0)).forEach(function(milestone) { %>
+                                    <div class="d-flex gap-3 mb-3">
+                                        <div class="flex-shrink-0">
+                                            <div class="bg-primary text-white rounded-circle p-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                                <% if (milestone.icon) { %>
+                                                    <i class="fa <%= milestone.icon %> fa-2x"></i>
+                                                <% } else { %>
+                                                    <span class="fw-bold"><%= milestone.year %></span>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h6><%= milestone.title %></h6>
+                                            <p class="text-muted"><%= milestone.year %></p>
+                                            <p><%= milestone.description %></p>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        </div>
+                        <hr>
+                    <% } %>
+
+                    <!-- Video & Brochure -->
+                    <div class="row">
+                        <% if (about.videoUrl) { %>
+                            <div class="col-md-6 mb-3">
+                                <h6>Video</h6>
+                                <a href="<%= about.videoUrl %>" target="_blank" class="btn btn-outline-primary">
+                                    <i class="fa fa-play-circle me-2"></i>Watch Video
+                                </a>
+                            </div>
+                        <% } %>
+
+                        <% if (about.brochureUrl) { %>
+                            <div class="col-md-6 mb-3">
+                                <h6>Brochure</h6>
+                                <a href="<%= about.brochureUrl %>" target="_blank" class="btn btn-outline-primary">
+                                    <i class="fa fa-file-pdf me-2"></i>Download Brochure
+                                </a>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <hr>
+
+                    <!-- Status & Dates -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p><strong>Status:</strong> 
+                                <span class="badge bg-<%= about.isActive ? 'success' : 'secondary' %>">
+                                    <%= about.isActive ? 'Active' : 'Inactive' %>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><strong>Created:</strong> <%= new Date(about.createdAt).toLocaleString() %></p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><strong>Last Updated:</strong> <%= new Date(about.updatedAt).toLocaleString() %></p>
+                        </div>
+                    </div>
+
+                <% } else { %>
+                    <div class="text-center py-5">
+                        <i class="fa fa-info-circle fa-4x text-muted mb-3"></i>
+                        <h5>No About Information Found</h5>
+                        <p>Click the button below to create about information.</p>
+                        <a href="/admin/about/edit" class="btn btn-primary">
+                            <i class="fa fa-plus me-2"></i>Create About
+                        </a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-hide alerts after 5 seconds
+setTimeout(function() {
+    var alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+        var bsAlert = new bootstrap.Alert(alert);
+        bsAlert.close();
+    });
+}, 5000);
+</script>

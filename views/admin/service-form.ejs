@@ -1,0 +1,10 @@
+<%- include('../layouts/admin-users', { 
+    title: isEdit ? 'Edit Service' : 'Create Service',
+    currentPage: 'services',
+    user: typeof user !== 'undefined' ? user : null,
+    body: include('../partials/service-form-content', { 
+        isEdit: isEdit,
+        serviceData: serviceData,
+        error: typeof error !== 'undefined' ? error : null
+    })
+}) %>

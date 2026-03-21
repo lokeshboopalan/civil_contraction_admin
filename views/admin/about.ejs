@@ -1,0 +1,10 @@
+<%- include('../layouts/admin-users', { 
+    title: 'About Management',
+    currentPage: 'about',
+    user: typeof user !== 'undefined' ? user : null,
+    body: include('../partials/about-content', { 
+        about: about,
+        success: typeof success !== 'undefined' ? success : null,
+        error: typeof error !== 'undefined' ? error : null
+    })
+}) %>

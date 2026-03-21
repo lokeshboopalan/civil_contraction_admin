@@ -1,0 +1,10 @@
+<%- include('../layouts/admin-users', { 
+    title: isEdit ? 'Edit Slider' : 'Create Slider',
+    currentPage: 'sliders',
+    user: typeof user !== 'undefined' ? user : null,
+    body: include('../partials/slider-form-content', { 
+        isEdit: isEdit,
+        sliderData: sliderData,
+        error: typeof error !== 'undefined' ? error : null
+    })
+}) %>

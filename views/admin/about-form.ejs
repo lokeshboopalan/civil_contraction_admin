@@ -1,0 +1,9 @@
+<%- include('../layouts/admin-users', { 
+    title: 'Edit About',
+    currentPage: 'about',
+    user: typeof user !== 'undefined' ? user : null,
+    body: include('../partials/about-form-content', { 
+        aboutData: aboutData,
+        error: typeof error !== 'undefined' ? error : null
+    })
+}) %>

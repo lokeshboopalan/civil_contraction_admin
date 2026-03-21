@@ -1,0 +1,103 @@
+<%- include('../layouts/admin-users', { 
+    title: isEdit ? 'Edit User' : 'Create User',
+    currentPage: 'users',
+    user: typeof user !== 'undefined' ? user : null,
+    body: `
+        <div class="container-fluid pt-4 px-4">
+            <div class="row g-4">
+                <div class="col-sm-12 col-xl-12">
+                    <div class="bg-light rounded h-100 p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h5 class="mb-0">${isEdit ? 'Edit User' : 'Create New User'}</h5>
+                            <a href="/admin/users" class="btn btn-sm btn-secondary">
+                                <i class="fa fa-arrow-left me-2"></i>Back to List
+                            </a>
+                        </div>
+                        
+                        ${typeof error !== 'undefined' && error ? `
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="fa fa-exclamation-circle me-2"></i>${error}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        ` : ''}
+                        
+                        <form action="${isEdit ? '/admin/users/' + userData.id : '/admin/users'}" method="POST">
+                            ${isEdit ? '<input type="hidden" name="_method" value="PUT">' : ''}
+                            
+                            <h6 class="mb-4">User Information</h6>
+                            
+                            <div class="row g-3">
+                                <!-- Name Input -->
+                                <div class="col-md-6">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="name" 
+                                               name="name" 
+                                               placeholder="Full Name"
+                                               value="${userData.name || ''}" 
+                                               required>
+                                    </div>
+                                </div>
+                                
+                                <!-- Email Input -->
+                                <div class="col-md-6">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                                        <input type="email" 
+                                               class="form-control" 
+                                               id="email" 
+                                               name="email" 
+                                               placeholder="Email Address"
+                                               value="${userData.email || ''}" 
+                                               ${isEdit ? '' : 'required'}>
+                                    </div>
+                                </div>
+                                
+                                <!-- Password Input (only for create) -->
+                                ${!isEdit ? `
+                                <div class="col-md-6">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                                        <input type="password" 
+                                               class="form-control" 
+                                               id="password" 
+                                               name="password" 
+                                               placeholder="Password" 
+                                               required 
+                                               minlength="6">
+                                    </div>
+                                </div>
+                                ` : ''}
+                                
+                                <!-- Role Select -->
+                                <div class="col-md-6">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="fa fa-tag"></i></span>
+                                        <select class="form-select" id="role" name="role" required>
+                                            <option value="">Select role...</option>
+                                            <option value="admin" ${userData.role === 'admin' ? 'selected' : ''}>Admin</option>
+                                            <option value="editor" ${userData.role === 'editor' ? 'selected' : ''}>Editor</option>
+                                            <option value="user" ${userData.role === 'user' ? 'selected' : ''}>User</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Form Actions -->
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-save me-2"></i>${isEdit ? 'Update User' : 'Create User'}
+                                </button>
+                                <a href="/admin/users" class="btn btn-secondary ms-2">
+                                    <i class="fa fa-times me-2"></i>Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `
+}) %>

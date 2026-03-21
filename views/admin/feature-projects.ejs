@@ -1,0 +1,10 @@
+<%- include('../layouts/admin-users', { 
+    title: 'Feature Projects Management',
+    currentPage: 'feature-projects',
+    user: typeof user !== 'undefined' ? user : null,
+    body: include('../partials/feature-projects-content', { 
+        projects: projects,
+        success: typeof success !== 'undefined' ? success : null,
+        error: typeof error !== 'undefined' ? error : null
+    })
+}) %>

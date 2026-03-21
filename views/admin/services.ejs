@@ -1,0 +1,10 @@
+<%- include('../layouts/admin-users', { 
+    title: 'Services Management',
+    currentPage: 'services',
+    user: typeof user !== 'undefined' ? user : null,
+    body: include('../partials/services-content', { 
+        services: services,
+        success: typeof success !== 'undefined' ? success : null,
+        error: typeof error !== 'undefined' ? error : null
+    })
+}) %>
