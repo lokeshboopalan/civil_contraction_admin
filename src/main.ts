@@ -79,7 +79,7 @@ async function bootstrap() {
   // Set up views
   const viewsPath = join(__dirname, '..', 'views');
   console.log(
-    `Views directory path: ${viewsPath} - ${fs.existsSync(viewsPath) ? '✅ EXISTS' : '❌ NOT FOUND'}`,
+    `Views directory path: ${viewsPath} - ${fs.existsSync(viewsPath) ? 'EXISTS' : 'NOT FOUND'}`,
   );
 
   if (fs.existsSync(viewsPath)) {

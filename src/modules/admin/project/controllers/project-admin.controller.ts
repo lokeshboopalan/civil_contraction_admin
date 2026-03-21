@@ -299,4 +299,49 @@ export class ProjectAdminController extends BaseController {
       );
     }
   }
+
+  @Delete('projects/images/:projectId/:publicId')
+  async removeProjectImage(
+    @Param('projectId') projectId: string,
+    @Param('publicId') publicId: string,
+  ) {
+    console.log('Deletingimagedsf:', projectId);
+
+    try {
+      const decodedPublicId = decodeURIComponent(publicId);
+      console.log('Decoded image:', decodedPublicId);
+
+      // 1. Get project
+      const project = await this.projectsService.findOne(Number(projectId));
+      console.log(project, 'project');
+
+      if (!project) {
+        throw new HttpException('Project not found', HttpStatus.NOT_FOUND);
+      }
+
+      // 2. Delete from Cloudinary
+      const result = await this.cloudinaryService.deleteFile(decodedPublicId);
+      console.log(result, 'cloudinary result');
+
+      // 3. Remove image from DB
+      const updatedImages = (project.images || []).filter(
+        (img) => img.publicId !== decodedPublicId,
+      );
+      console.log(updatedImages, 'updatedImages');
+
+      // 4. Update DB
+      await this.projectsService.update(Number(projectId), {
+        ...project,
+        images: updatedImages,
+      });
+
+      return { message: 'Image deleted successfully' };
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      throw new HttpException(
+        error.message || 'Failed to delete image',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }
