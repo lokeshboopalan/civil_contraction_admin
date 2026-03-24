@@ -5,11 +5,16 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('/')
-  @Render('admin/dashboard')
-  dashboard() {
-    return {
-      title: 'Dashboard',
-    };
+  // @Get('/')
+  // @Render('admin/dashboard')
+  // dashboard() {
+  //   return {
+  //     title: 'Dashboard',
+  //   };
+  // }
+
+  @Get('/health')
+  health() {
+    return { status: 'ok', message: 'Server is running' };
   }
 }

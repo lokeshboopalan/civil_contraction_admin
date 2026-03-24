@@ -1,0 +1,16 @@
+<%- include('../layouts/frontend', { title: title, currentPage: currentPage, body: `
+    <div class="container mt-5 pt-5">
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="alert alert-success">
+                    <h1 class="display-4">✅ Test Page Working!</h1>
+                    <p class="lead">This is a test page to verify frontend is working.</p>
+                    <p>Current time: ${new Date().toLocaleString()}</p>
+                    <hr>
+                    <a href="/admin/dashboard" class="btn btn-primary">Go to Admin Panel</a>
+                    <a href="/" class="btn btn-secondary">Go to Homepage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+` }) %>

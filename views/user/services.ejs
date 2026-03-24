@@ -1,0 +1,277 @@
+<%- include('../layouts/frontend', { title: title, currentPage: currentPage, body: ` <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Topbar Start -->
+    <div class="container-fluid topbar d-none d-xl-block w-100">
+        <div class="row gx-0 align-items-center" style="height: 45px;">
+            <div class="col-lg-6 text-center text-lg-start mb-lg-0">
+                <div class="d-flex flex-wrap">
+                    <a href="#" class="text-muted me-4"><i class="fas fa-map-marker-alt text-secondary me-2"></i>Find A
+                        Location</a>
+                    <a href="#" class="text-muted me-4"><i
+                            class="fas fa-phone-alt text-secondary me-2"></i>+01234567890</a>
+                    <a href="#" class="text-muted me-0"><i
+                            class="fas fa-envelope text-secondary me-2"></i>Example@gmail.com</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center text-lg-end">
+                <div class="d-flex align-items-center justify-content-end">
+                    <a href="#" class="text-muted me-3"><i class="fas fa-clock text-secondary me-2"></i>Mon - Sat 8:00 -
+                        17:30, Sunday - CLOSED</a>
+                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
+                            class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
+                            class="fab fa-twitter"></i></a>
+                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
+                            class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+    <!-- Navbar & Hero Start -->
+    <div class="container-fluid sticky-top px-0">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-light py-3 px-4">
+            <a href="/" class="navbar-brand p-0">
+                <h1 class="text-secondary display-6"><i class="fas fa-city text-primary me-3"></i>Thirupathi</h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto pt-2 pt-lg-0">
+                    <a href="/" class="nav-item nav-link ${currentPage === 'home' ? 'active' : ''}">Home</a>
+                    <a href="/about" class="nav-item nav-link ${currentPage === 'about' ? 'active' : ''}">About</a>
+                    <a href="/services"
+                        class="nav-item nav-link ${currentPage === 'services' ? 'active' : ''}">Services</a>
+                    <a href="/projects"
+                        class="nav-item nav-link ${currentPage === 'projects' ? 'active' : ''}">Projects</a>
+                    <a href="/articles" class="nav-item nav-link ${currentPage === 'articles' ? 'active' : ''}">Blog</a>
+                    <a href="/contact"
+                        class="nav-item nav-link ${currentPage === 'contact' ? 'active' : ''}">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar & Hero End -->
+
+    <!-- Header Start -->
+    <div class="container-fluid bg-breadcrumb">
+        <div class="container text-center py-5" style="max-width: 900px;">
+            <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Our Services</h4>
+            <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item text-secondary active">Services</li>
+            </ol>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- Services Start -->
+    <div class="container-fluid service py-5">
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                <p class="text-uppercase text-secondary fs-5 mb-0">Our Services</p>
+                <h2 class="display-4 text-capitalize mb-3">our service is creative, & decent</h2>
+            </div>
+            <div class="row g-4">
+                ${services && services.length > 0 ? services.map((service, index) => `
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="${0.2 + (index * 0.1)}s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            ${service.images && service.images[0] ? `
+                            <img src="${service.images[0].url}" class="img-fluid w-100" alt="${service.title}"
+                                style="height: 250px; width: 100%; object-fit: cover;">
+                            ` : `
+                            <img src="/frontend/img/service-${(index % 6) + 1}.jpg" class="img-fluid w-100"
+                                alt="Service" style="height: 250px; width: 100%; object-fit: cover;">
+                            `}
+                        </div>
+                        <div class="service-content text-center p-4">
+                            <div class="bg-secondary btn-xl-square mx-auto" style="width: 100px; height: 100px;">
+                                <i class="fas ${service.icon || 'fa-home'} text-primary fa-4x"></i>
+                            </div>
+                            <a href="/services/${service.id}" class="d-block fs-4 my-4">${service.title}</a>
+                            <p class="text-white mb-4">${service.shortDescription || service.description || 'Quality
+                                service delivered with excellence and commitment to client satisfaction.'}</p>
+                            <a class="btn btn-secondary py-2 px-4" href="/services/${service.id}">Read More</a>
+                        </div>
+                        <div class="service-title">
+                            <div class="d-flex align-items-center ps-4 w-100">
+                                <h4>${service.title}</h4>
+                            </div>
+                            <div class="btn-xl-square bg-secondary p-3" style="width: 70px; height: 70px;">
+                                <i class="fas ${service.icon || 'fa-home'} text-primary fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `).join('') : `
+                <!-- Default Services when no data -->
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            <img src="/frontend/img/service-1.jpg" class="img-fluid w-100" alt="General Construction"
+                                style="height: 250px; width: 100%; object-fit: cover;">
+                        </div>
+                        <div class="service-content text-center p-4">
+                            <div class="bg-secondary btn-xl-square mx-auto" style="width: 100px; height: 100px;">
+                                <i class="fas fa-home text-primary fa-4x"></i>
+                            </div>
+                            <a href="#" class="d-block fs-4 my-4">General Construction</a>
+                            <p class="text-white mb-4">Expert general construction services for residential and
+                                commercial projects with quality assurance.</p>
+                            <a class="btn btn-secondary py-2 px-4" href="#">Read More</a>
+                        </div>
+                        <div class="service-title">
+                            <div class="d-flex align-items-center ps-4 w-100">
+                                <h4>General Construction</h4>
+                            </div>
+                            <div class="btn-xl-square bg-secondary p-3" style="width: 70px; height: 70px;">
+                                <i class="fas fa-home text-primary fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            <img src="/frontend/img/service-2.jpg" class="img-fluid w-100" alt="Property Maintenance"
+                                style="height: 250px; width: 100%; object-fit: cover;">
+                        </div>
+                        <div class="service-content text-center p-4">
+                            <div class="bg-secondary btn-xl-square mx-auto" style="width: 100px; height: 100px;">
+                                <i class="fas fa-tools text-primary fa-4x"></i>
+                            </div>
+                            <a href="#" class="d-block fs-4 my-4">Property Maintenance</a>
+                            <p class="text-white mb-4">Complete property maintenance services to keep your buildings in
+                                perfect condition.</p>
+                            <a class="btn btn-secondary py-2 px-4" href="#">Read More</a>
+                        </div>
+                        <div class="service-title">
+                            <div class="d-flex align-items-center justify-content-start ps-4 w-100">
+                                <h4>Property Maintenance</h4>
+                            </div>
+                            <div class="btn-xl-square bg-secondary p-3" style="width: 70px; height: 70px;">
+                                <i class="fas fa-tools text-primary fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            <img src="/frontend/img/service-3.jpg" class="img-fluid w-100" alt="Project Management"
+                                style="height: 250px; width: 100%; object-fit: cover;">
+                        </div>
+                        <div class="service-content text-center p-4">
+                            <div class="bg-secondary btn-xl-square mx-auto" style="width: 100px; height: 100px;">
+                                <i class="fas fa-chart-line text-primary fa-4x"></i>
+                            </div>
+                            <a href="#" class="d-block fs-4 my-4">Project Management</a>
+                            <p class="text-white mb-4">Professional project management services ensuring timely delivery
+                                and quality control.</p>
+                            <a class="btn btn-secondary py-2 px-4" href="#">Read More</a>
+                        </div>
+                        <div class="service-title">
+                            <div class="d-flex align-items-center justify-content-start ps-4 w-100">
+                                <h4>Project Management</h4>
+                            </div>
+                            <div class="btn-xl-square bg-secondary p-3" style="width: 70px; height: 70px;">
+                                <i class="fas fa-chart-line text-primary fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            <img src="/frontend/img/service-4.jpg" class="img-fluid w-100" alt="Virtual Design & Build"
+                                style="height: 250px; width: 100%; object-fit: cover;">
+                        </div>
+                        <div class="service-content text-center p-4">
+                            <div class="bg-secondary btn-xl-square mx-auto" style="width: 100px; height: 100px;">
+                                <i class="fas fa-drafting-compass text-primary fa-4x"></i>
+                            </div>
+                            <a href="#" class="d-block fs-4 my-4">Virtual Design & Build</a>
+                            <p class="text-white mb-4">Advanced virtual design and construction planning services.</p>
+                            <a class="btn btn-secondary py-2 px-4" href="#">Read More</a>
+                        </div>
+                        <div class="service-title">
+                            <div class="d-flex align-items-center justify-content-start ps-4 w-100">
+                                <h4>Virtual Design & Build</h4>
+                            </div>
+                            <div class="btn-xl-square bg-secondary p-3" style="width: 70px; height: 70px;">
+                                <i class="fas fa-drafting-compass text-primary fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            <img src="/frontend/img/service-5.jpg" class="img-fluid w-100" alt="Preconstruction"
+                                style="height: 250px; width: 100%; object-fit: cover;">
+                        </div>
+                        <div class="service-content text-center p-4">
+                            <div class="bg-secondary btn-xl-square mx-auto" style="width: 100px; height: 100px;">
+                                <i class="fas fa-clipboard-list text-primary fa-4x"></i>
+                            </div>
+                            <a href="#" class="d-block fs-4 my-4">Preconstruction</a>
+                            <p class="text-white mb-4">Comprehensive preconstruction planning and consulting services.
+                            </p>
+                            <a class="btn btn-secondary py-2 px-4" href="#">Read More</a>
+                        </div>
+                        <div class="service-title">
+                            <div class="d-flex align-items-center justify-content-start ps-4 w-100">
+                                <h4>Preconstruction</h4>
+                            </div>
+                            <div class="btn-xl-square bg-secondary p-3" style="width: 70px; height: 70px;">
+                                <i class="fas fa-clipboard-list text-primary fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            <img src="/frontend/img/service-6.jpg" class="img-fluid w-100" alt="Design Build"
+                                style="height: 250px; width: 100%; object-fit: cover;">
+                        </div>
+                        <div class="service-content text-center p-4">
+                            <div class="bg-secondary btn-xl-square mx-auto" style="width: 100px; height: 100px;">
+                                <i class="fas fa-building text-primary fa-4x"></i>
+                            </div>
+                            <a href="#" class="d-block fs-4 my-4">Design Build</a>
+                            <p class="text-white mb-4">Integrated design and construction services for seamless project
+                                delivery.</p>
+                            <a class="btn btn-secondary py-2 px-4" href="#">Read More</a>
+                        </div>
+                        <div class="service-title">
+                            <div class="d-flex align-items-center justify-content-start ps-4 w-100">
+                                <h4>Design Build</h4>
+                            </div>
+                            <div class="btn-xl-square bg-secondary p-3" style="width: 70px; height: 70px;">
+                                <i class="fas fa-building text-primary fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `}
+                <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
+                    <a class="btn btn-secondary py-3 px-5 mt-4" href="/services">More Services</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Services End -->
+    ` }) %>

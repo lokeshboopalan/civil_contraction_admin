@@ -37,6 +37,30 @@ export class SliderService {
     });
   }
 
+// async findActive(): Promise<Slider[]> {
+//   return await this.sliderRepository.find({
+//     where: { isActive: true }, // ✅ correct field
+//     order: {
+//       order: 'ASC',            // ✅ correct field
+//       createdAt: 'DESC',       // optional
+//     },
+//   });
+// }
+
+
+async findActive(): Promise<Slider[]> {
+  console.log('🔍 Finding active sliders');
+  const sliders = await this.sliderRepository.find({
+    where: { isActive: true },
+    order: {
+      order: 'ASC',
+      createdAt: 'DESC',
+    },
+  });
+  console.log(`Found ${sliders.length} active sliders`);
+  return sliders;
+}
+
   async findOne(id: number): Promise<Slider> {
     const slider = await this.sliderRepository.findOne({ where: { id } });
     if (!slider) {

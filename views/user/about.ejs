@@ -1,0 +1,274 @@
+<%- include('../layouts/frontend', { title: title, currentPage: currentPage, body: ` <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Topbar Start -->
+    <div class="container-fluid topbar d-none d-xl-block w-100">
+        <div class="row gx-0 align-items-center" style="height: 45px;">
+            <div class="col-lg-6 text-center text-lg-start mb-lg-0">
+                <div class="d-flex flex-wrap">
+                    <a href="#" class="text-muted me-4"><i class="fas fa-map-marker-alt text-secondary me-2"></i>Find A
+                        Location</a>
+                    <a href="#" class="text-muted me-4"><i
+                            class="fas fa-phone-alt text-secondary me-2"></i>+01234567890</a>
+                    <a href="#" class="text-muted me-0"><i
+                            class="fas fa-envelope text-secondary me-2"></i>Example@gmail.com</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center text-lg-end">
+                <div class="d-flex align-items-center justify-content-end">
+                    <a href="#" class="text-muted me-3"><i class="fas fa-clock text-secondary me-2"></i>Mon - Sat 8:00 -
+                        17:30, Sunday - CLOSED</a>
+                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
+                            class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
+                            class="fab fa-twitter"></i></a>
+                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
+                            class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+    <!-- Navbar & Hero Start -->
+    <div class="container-fluid sticky-top px-0">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-light py-3 px-4">
+            <a href="/" class="navbar-brand p-0">
+                <h1 class="text-secondary display-6"><i class="fas fa-city text-primary me-3"></i>Thirupathi</h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto pt-2 pt-lg-0">
+                    <a href="/" class="nav-item nav-link ${currentPage === 'home' ? 'active' : ''}">Home</a>
+                    <a href="/about" class="nav-item nav-link ${currentPage === 'about' ? 'active' : ''}">About</a>
+                    <a href="/services"
+                        class="nav-item nav-link ${currentPage === 'services' ? 'active' : ''}">Services</a>
+                    <a href="/projects"
+                        class="nav-item nav-link ${currentPage === 'projects' ? 'active' : ''}">Projects</a>
+                    <a href="/articles" class="nav-item nav-link ${currentPage === 'articles' ? 'active' : ''}">Blog</a>
+                    <a href="/contact"
+                        class="nav-item nav-link ${currentPage === 'contact' ? 'active' : ''}">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar & Hero End -->
+
+    <!-- Header Start -->
+    <div class="container-fluid bg-breadcrumb">
+        <div class="container text-center py-5" style="max-width: 900px;">
+            <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">About Us</h4>
+            <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item text-secondary active">About</li>
+            </ol>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- About Start -->
+    <div class="container-fluid about py-5">
+        <div class="container py-5">
+            <div class="row g-5 align-items-center">
+                <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.1s">
+                    <div class="about-item-image d-flex">
+                        ${about.images && about.images[0] ? `
+                        <img src="${about.images[0].url}" class="img-1 img-fluid w-50" alt="${about.title}">
+                        ` : `
+                        <img src="/frontend/img/about.jpg" class="img-1 img-fluid w-50" alt="About">
+                        `}
+                        ${about.images && about.images[1] ? `
+                        <img src="${about.images[1].url}" class="img-2 img-fluid w-50" alt="${about.title}">
+                        ` : `
+                        <img src="/frontend/img/about-3.jpg" class="img-2 img-fluid w-50" alt="About">
+                        `}
+                        <div class="about-item-image-content">
+                            <img src="/frontend/img/about-1.png" class="img-fluid w-100 h-100"
+                                style="object-fit: cover;" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.1s">
+                    <div class="about-item-content">
+                        <p class="text-uppercase text-secondary fs-5 mb-0">${about.subtitle || 'WE ARE CONSTRUCTION
+                            COMPANY'}</p>
+                        <h2 class="display-4 text-capitalize mb-3">${about.title || 'Making your vision come true at the
+                            basics.'}</h2>
+                        <p class="mb-4 fs-5">${about.longDescription || about.shortDescription || 'Quality construction
+                            services with commitment to excellence.'}</p>
+                        <div class="pb-4 mb-4 border-bottom">
+                            <div class="row g-4">
+                                <div class="col-lg-4">
+                                    <div class="about-item-content-img">
+                                        <img src="/frontend/img/about-2.jpg" class="img-fluid w-100" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="d-flex mb-4">
+                                        <div class="text-secondary">
+                                            <i class="fas fa-user-shield fa-3x"></i>
+                                        </div>
+                                        <h4 class="ms-3">Building quality standards</h4>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="text-secondary">
+                                            <i class="fas fa-users-cog fa-3x"></i>
+                                        </div>
+                                        <h4 class="ms-3">Certified engineer's team</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row gy-0 gx-4 justify-content-between pb-4">
+                            <div class="col-lg-6">
+                                <p class="text-dark"><i class="fas fa-check text-secondary me-1"></i> 100% Satisfaction
+                                </p>
+                                <p class="text-dark"><i class="fas fa-check text-secondary me-1"></i> Trained Employees
+                                </p>
+                            </div>
+                            <div class="col-lg-6">
+                                <p class="text-dark"><i class="fas fa-check text-secondary me-1"></i> Annual Pass
+                                    Programs</p>
+                                <p class="text-dark mb-0"><i class="fas fa-check text-secondary me-1"></i> Flexible and
+                                    cost effective</p>
+                            </div>
+                        </div>
+                        <a class="btn btn-secondary d-inline-block py-3 px-5 me-2 flex-shrink-0 wow fadeInUp"
+                            data-wow-delay="0.1s" href="/services">Our Services</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+    <!-- Mission & Vision Start -->
+    <div class="container-fluid mission-vision py-5 bg-light">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
+                    <div class="mission-vision-item text-center border p-5">
+                        <i class="fas fa-bullseye fa-4x text-secondary mb-4"></i>
+                        <h3 class="mb-3">Our Mission</h3>
+                        <p>${about.missionStatement || 'To deliver exceptional construction services with integrity,
+                            quality, and innovation, exceeding client expectations.'}</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="mission-vision-item text-center border p-5">
+                        <i class="fas fa-eye fa-4x text-secondary mb-4"></i>
+                        <h3 class="mb-3">Our Vision</h3>
+                        <p>${about.visionStatement || 'To be the most trusted and innovative construction company,
+                            setting new standards in quality and sustainability.'}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Mission & Vision End -->
+
+    <!-- Core Values Start -->
+    <div class="container-fluid core-values py-5">
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                <p class="text-uppercase text-secondary fs-5 mb-0">Our Values</p>
+                <h2 class="display-4 text-capitalize mb-3">Core Values</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="core-value-item text-center p-4">
+                        <i class="fas fa-gem fa-3x text-secondary mb-3"></i>
+                        <h4 class="mb-3">Integrity</h4>
+                        <p>We conduct business with honesty, transparency, and ethical practices.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="core-value-item text-center p-4">
+                        <i class="fas fa-medal fa-3x text-secondary mb-3"></i>
+                        <h4 class="mb-3">Excellence</h4>
+                        <p>We strive for excellence in every project we undertake.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="core-value-item text-center p-4">
+                        <i class="fas fa-users fa-3x text-secondary mb-3"></i>
+                        <h4 class="mb-3">Client Focus</h4>
+                        <p>We prioritize client satisfaction and build lasting relationships.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="core-value-item text-center p-4">
+                        <i class="fas fa-leaf fa-3x text-secondary mb-3"></i>
+                        <h4 class="mb-3">Sustainability</h4>
+                        <p>We commit to environmentally responsible construction practices.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 wow fadeInUp" data-wow-delay="0.6s">
+                    <div class="core-value-item text-center p-4">
+                        <i class="fas fa-lightbulb fa-3x text-secondary mb-3"></i>
+                        <h4 class="mb-3">Innovation</h4>
+                        <p>We embrace innovative technologies and modern construction methods.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 wow fadeInUp" data-wow-delay="0.7s">
+                    <div class="core-value-item text-center p-4">
+                        <i class="fas fa-handshake fa-3x text-secondary mb-3"></i>
+                        <h4 class="mb-3">Partnership</h4>
+                        <p>We build strong partnerships with clients, suppliers, and communities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Core Values End -->
+
+    <!-- Features Start -->
+    <div class="container-fluid feature bg-light py-5">
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                <p class="text-uppercase text-secondary fs-5 mb-0">Why US</p>
+                <h2 class="display-4 text-capitalize mb-3">Why Choose Us</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="feature-item text-center border p-5">
+                        <div class="feature-img bg-secondary d-inline-flex p-4">
+                            <i class="fas fa-city text-primary fa-5x"></i>
+                        </div>
+                        <a href="#" class="h4 d-block my-4">Expert Engineer</a>
+                        <p class="mb-0">Professional and experienced engineers dedicated to quality construction.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="feature-item text-center border p-5">
+                        <div class="feature-img bg-secondary d-inline-flex p-4">
+                            <i class="fas fa-funnel-dollar text-primary fa-5x"></i>
+                        </div>
+                        <a href="#" class="h4 d-block my-4">Free Estimates</a>
+                        <p class="mb-0">Get free project estimates and consultation before starting.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.6s">
+                    <div class="feature-item text-center border p-5">
+                        <div class="feature-img bg-secondary d-inline-flex p-4">
+                            <i class="fas fa-tools text-primary fa-5x"></i>
+                        </div>
+                        <a href="#" class="h4 d-block my-4">Quality Materials</a>
+                        <p class="mb-0">We use only the highest quality materials for all projects.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Features End -->
+    ` }) %>

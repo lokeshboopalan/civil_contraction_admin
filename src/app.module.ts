@@ -9,6 +9,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/admin/auth/auth.module';
 import { ProjectsModule } from './modules/admin/project/project.module';
 import { UserMiddleware } from './modules/admin/middleware/user.middleware';
+import { FrontendModule } from './modules/frontend/controllers/frontend.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { UserMiddleware } from './modules/admin/middleware/user.middleware';
       }),
     }),
     AuthModule,
+    FrontendModule,
     AdminModule,
     UserModule,
     ProjectsModule,
