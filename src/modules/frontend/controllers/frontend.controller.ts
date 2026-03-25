@@ -34,14 +34,14 @@ export class FrontendController {
         .findPublished()
         .catch(() => []);
       const projects = await this.projectService.findAll().catch(() => []);
-
-      console.log('=== FRONTEND DATA DEBUG ===');
-      console.log('About:', about ? 'Yes' : 'No');
-      console.log('Services count:', services?.length);
-      console.log('Sliders count:', sliders?.length);
-      console.log('Sliders data:', JSON.stringify(sliders, null, 2));
-      console.log('Articles count:', latestArticles?.length);
-      console.log('===========================');
+      // console.log('ServicesDcount:', services);
+      // console.log('=== FRONTEND DATA DEBUG ===');
+      // console.log('About:', about ? 'Yes' : 'No');
+      // console.log('Services count:', services?.length);
+      // console.log('Sliders count:', sliders?.length);
+      // console.log('Sliders data:', JSON.stringify(sliders, null, 2));
+      // console.log('Articles count:', latestArticles?.length);
+      // console.log('===========================');
 
       return {
         title: 'Thirupathi Constructions - Building Excellence',

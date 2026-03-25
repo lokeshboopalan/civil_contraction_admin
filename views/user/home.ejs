@@ -142,17 +142,39 @@
     <!-- About Section End -->
 
     <!-- Services Section Start -->
-    <div class="container-fluid services-modern py-5 bg-light">
-        <div class="container py-5">
-            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                <span class="badge bg-primary text-white px-4 py-2 rounded-pill mb-3">What We Offer</span>
-                <h2 class="display-4 fw-bold mb-3">Our Premium Services</h2>
-                <p class="text-muted">We provide comprehensive construction services tailored to meet your specific needs</p>
-            </div>
-            <div class="row g-4">
-                ${(() => {
-                    if (services && services.length > 0) {
-                        return services.slice(0, 6).map((service, index) => `
+<div class="container-fluid services-modern py-5 bg-light">
+    <div class="container py-5">
+        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+            <span class="badge bg-primary text-white px-4 py-2 rounded-pill mb-3">What We Offer</span>
+            <h2 class="display-4 fw-bold mb-3">Our Premium Services</h2>
+            <p class="text-muted">We provide comprehensive construction services tailored to meet your specific needs</p>
+        </div>
+        <div class="row g-4">
+            ${(() => {
+                if (services && services.length > 0) {
+                    return services.slice(0, 6).map((service, index) => {
+                        // Helper function to get proper icon class
+                        const getIconClass = (icon) => {
+                            if (!icon) return 'fas fa-home';
+                            
+                            // If icon already has a prefix (like 'fab fa-facebook' or 'far fa-heart')
+                            if (icon.includes(' ')) {
+                                return icon;
+                            }
+                            
+                            // If icon is just the name without fa- prefix
+                            if (!icon.startsWith('fa-')) {
+                                return `fas fa-${icon}`;
+                            }
+                            
+                            // If icon starts with fa- (like 'fa-home')
+                            return `fas ${icon}`;
+                        };
+                        
+                        // Get the icon class for this service
+                        const iconClass = getIconClass(service.icon);
+                        
+                        return `
                             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="${0.2 + (index * 0.1)}s">
                                 <div class="service-card-modern bg-white rounded-4 overflow-hidden shadow-sm h-100">
                                     <div class="service-card-img position-relative overflow-hidden">
@@ -163,7 +185,7 @@
                                         `}
                                         <div class="service-icon-modern position-absolute start-0 bottom-0 mb-3 ms-3">
                                             <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
-                                                <i class="fas ${service.icon || 'fa-home'} text-white fa-2x"></i>
+                                                <i class="${iconClass} text-white fa-2x"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -174,69 +196,70 @@
                                     </div>
                                 </div>
                             </div>
-                        `).join('');
-                    } else {
-                        return `
-                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
-                                <div class="service-card-modern bg-white rounded-4 overflow-hidden shadow-sm h-100">
-                                    <div class="service-card-img position-relative overflow-hidden">
-                                        <img src="/frontend/img/service-1.jpg" class="img-fluid w-100" alt="General Construction" style="height: 220px; width: 100%; object-fit: cover;">
-                                        <div class="service-icon-modern position-absolute start-0 bottom-0 mb-3 ms-3">
-                                            <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
-                                                <i class="fas fa-home text-white fa-2x"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="service-card-content p-4">
-                                        <h4 class="mb-3 fw-bold">General Construction</h4>
-                                        <p class="text-muted mb-4">Expert general construction services for residential and commercial projects with quality assurance.</p>
-                                        <a href="#" class="btn btn-outline-primary rounded-pill px-4">Learn More <i class="fas fa-arrow-right ms-2"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                                <div class="service-card-modern bg-white rounded-4 overflow-hidden shadow-sm h-100">
-                                    <div class="service-card-img position-relative overflow-hidden">
-                                        <img src="/frontend/img/service-2.jpg" class="img-fluid w-100" alt="Property Maintenance" style="height: 220px; width: 100%; object-fit: cover;">
-                                        <div class="service-icon-modern position-absolute start-0 bottom-0 mb-3 ms-3">
-                                            <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
-                                                <i class="fas fa-tools text-white fa-2x"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="service-card-content p-4">
-                                        <h4 class="mb-3 fw-bold">Property Maintenance</h4>
-                                        <p class="text-muted mb-4">Complete property maintenance services to keep your buildings in perfect condition.</p>
-                                        <a href="#" class="btn btn-outline-primary rounded-pill px-4">Learn More <i class="fas fa-arrow-right ms-2"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
-                                <div class="service-card-modern bg-white rounded-4 overflow-hidden shadow-sm h-100">
-                                    <div class="service-card-img position-relative overflow-hidden">
-                                        <img src="/frontend/img/service-3.jpg" class="img-fluid w-100" alt="Project Management" style="height: 220px; width: 100%; object-fit: cover;">
-                                        <div class="service-icon-modern position-absolute start-0 bottom-0 mb-3 ms-3">
-                                            <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
-                                                <i class="fas fa-chart-line text-white fa-2x"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="service-card-content p-4">
-                                        <h4 class="mb-3 fw-bold">Project Management</h4>
-                                        <p class="text-muted mb-4">Professional project management services ensuring timely delivery and quality control.</p>
-                                        <a href="#" class="btn btn-outline-primary rounded-pill px-4">Learn More <i class="fas fa-arrow-right ms-2"></i></a>
-                                    </div>
-                                </div>
-                            </div>
                         `;
-                    }
-                })()}
-                <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
-                    <a class="btn btn-primary rounded-pill px-5 py-3 mt-4" href="/services">View All Services <i class="fas fa-arrow-right ms-2"></i></a>
-                </div>
+                    }).join('');
+                } else {
+                    return `
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+                            <div class="service-card-modern bg-white rounded-4 overflow-hidden shadow-sm h-100">
+                                <div class="service-card-img position-relative overflow-hidden">
+                                    <img src="/frontend/img/service-1.jpg" class="img-fluid w-100" alt="General Construction" style="height: 220px; width: 100%; object-fit: cover;">
+                                    <div class="service-icon-modern position-absolute start-0 bottom-0 mb-3 ms-3">
+                                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
+                                            <i class="fas fa-home text-white fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="service-card-content p-4">
+                                    <h4 class="mb-3 fw-bold">General Construction</h4>
+                                    <p class="text-muted mb-4">Expert general construction services for residential and commercial projects with quality assurance.</p>
+                                    <a href="#" class="btn btn-outline-primary rounded-pill px-4">Learn More <i class="fas fa-arrow-right ms-2"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                            <div class="service-card-modern bg-white rounded-4 overflow-hidden shadow-sm h-100">
+                                <div class="service-card-img position-relative overflow-hidden">
+                                    <img src="/frontend/img/service-2.jpg" class="img-fluid w-100" alt="Property Maintenance" style="height: 220px; width: 100%; object-fit: cover;">
+                                    <div class="service-icon-modern position-absolute start-0 bottom-0 mb-3 ms-3">
+                                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
+                                            <i class="fas fa-tools text-white fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="service-card-content p-4">
+                                    <h4 class="mb-3 fw-bold">Property Maintenance</h4>
+                                    <p class="text-muted mb-4">Complete property maintenance services to keep your buildings in perfect condition.</p>
+                                    <a href="#" class="btn btn-outline-primary rounded-pill px-4">Learn More <i class="fas fa-arrow-right ms-2"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
+                            <div class="service-card-modern bg-white rounded-4 overflow-hidden shadow-sm h-100">
+                                <div class="service-card-img position-relative overflow-hidden">
+                                    <img src="/frontend/img/service-3.jpg" class="img-fluid w-100" alt="Project Management" style="height: 220px; width: 100%; object-fit: cover;">
+                                    <div class="service-icon-modern position-absolute start-0 bottom-0 mb-3 ms-3">
+                                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
+                                            <i class="fas fa-chart-line text-white fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="service-card-content p-4">
+                                    <h4 class="mb-3 fw-bold">Project Management</h4>
+                                    <p class="text-muted mb-4">Professional project management services ensuring timely delivery and quality control.</p>
+                                    <a href="#" class="btn btn-outline-primary rounded-pill px-4">Learn More <i class="fas fa-arrow-right ms-2"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            })()}
+            <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
+                <a class="btn btn-primary rounded-pill px-5 py-3 mt-4" href="/services">View All Services <i class="fas fa-arrow-right ms-2"></i></a>
             </div>
         </div>
     </div>
+</div>
     <!-- Services Section End -->
 
     <!-- Projects Section Start -->
