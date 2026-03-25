@@ -21,16 +21,32 @@ import { FrontendModule } from './modules/frontend/controllers/frontend.module';
     // ADD THIS BLOCK
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'postgres',
-        host: config.get('database.host'),
-        port: config.get('database.port'),
-        username: config.get('database.username'),
-        password: config.get('database.password'),
-        database: config.get('database.name'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true, // dev only
-      }),
+      useFactory: async (config: ConfigService) => {
+        const databaseUrl = process.env.DATABASE_URL;
+
+        if (databaseUrl) {
+          return {
+            type: 'postgres',
+            url: databaseUrl,
+            autoLoadEntities: true,
+            synchronize: true,
+            ssl: {
+              rejectUnauthorized: false,
+            },
+          };
+        }
+
+        return {
+          type: 'postgres',
+          host: config.get('database.host'),
+          port: config.get('database.port'),
+          username: config.get('database.username'),
+          password: config.get('database.password'),
+          database: config.get('database.name'),
+          autoLoadEntities: true,
+          synchronize: true,
+        };
+      },
     }),
     AuthModule,
     FrontendModule,
