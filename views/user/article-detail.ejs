@@ -1,65 +1,11 @@
-<%- include('../layouts/frontend', { title: title, currentPage: currentPage, body: ` <!-- Spinner Start -->
-    <div id="spinner"
-        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+<%- include('../layouts/frontend', { title: title, currentPage: currentPage, body: `
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
         </div>
     </div>
     <!-- Spinner End -->
-
-    <!-- Topbar Start -->
-    <div class="container-fluid topbar d-none d-xl-block w-100">
-        <div class="row gx-0 align-items-center" style="height: 45px;">
-            <div class="col-lg-6 text-center text-lg-start mb-lg-0">
-                <div class="d-flex flex-wrap">
-                    <a href="#" class="text-muted me-4"><i class="fas fa-map-marker-alt text-secondary me-2"></i>Find A
-                        Location</a>
-                    <a href="#" class="text-muted me-4"><i
-                            class="fas fa-phone-alt text-secondary me-2"></i>+01234567890</a>
-                    <a href="#" class="text-muted me-0"><i
-                            class="fas fa-envelope text-secondary me-2"></i>Example@gmail.com</a>
-                </div>
-            </div>
-            <div class="col-lg-6 text-center text-lg-end">
-                <div class="d-flex align-items-center justify-content-end">
-                    <a href="#" class="text-muted me-3"><i class="fas fa-clock text-secondary me-2"></i>Mon - Sat 8:00 -
-                        17:30, Sunday - CLOSED</a>
-                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
-                            class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
-                            class="fab fa-twitter"></i></a>
-                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
-                            class="fab fa-instagram"></i></a>
-                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
-                            class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Topbar End -->
-
-    <!-- Navbar & Hero Start -->
-    <div class="container-fluid sticky-top px-0">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-light py-3 px-4">
-            <a href="/" class="navbar-brand p-0">
-                <h1 class="text-secondary display-6"><i class="fas fa-city text-primary me-3"></i>Thirupathi</h1>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="fa fa-bars"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav ms-auto pt-2 pt-lg-0">
-                    <a href="/" class="nav-item nav-link">Home</a>
-                    <a href="/about" class="nav-item nav-link">About</a>
-                    <a href="/services" class="nav-item nav-link">Services</a>
-                    <a href="/projects" class="nav-item nav-link">Projects</a>
-                    <a href="/articles" class="nav-item nav-link active">Blog</a>
-                    <a href="/contact" class="nav-item nav-link">Contact</a>
-                </div>
-            </div>
-        </nav>
-    </div>
-    <!-- Navbar & Hero End -->
 
     <!-- Header Start -->
     <div class="container-fluid bg-breadcrumb">
@@ -79,26 +25,27 @@
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-8">
-                    ${article.images && article.images[0] ? `
-                    <div class="mb-4">
-                        <img src="${article.images[0].url}" class="img-fluid w-100 rounded" alt="${article.title}"
-                            style="height: 450px; object-fit: cover;">
-                    </div>
-                    ` : `
-                    <img src="/frontend/img/blog-detail.jpg" class="img-fluid w-100 rounded mb-4" alt="${article.title}"
-                        style="height: 450px; object-fit: cover;">
-                    `}
+                    ${(() => {
+                        if (article.images && article.images[0]) {
+                            return `
+                                <div class="mb-4">
+                                    <img src="${article.images[0].url}" class="img-fluid w-100 rounded" alt="${article.title}" style="height: 450px; object-fit: cover;">
+                                </div>
+                            `;
+                        } else {
+                            return `
+                                <img src="/frontend/img/blog-detail.jpg" class="img-fluid w-100 rounded mb-4" alt="${article.title}" style="height: 450px; object-fit: cover;">
+                            `;
+                        }
+                    })()}
 
                     <div class="d-flex justify-content-between mb-4">
                         <div>
-                            <span class="text-muted me-3"><i class="fa fa-calendar-alt text-secondary me-1"></i> ${new
-                                Date(article.createdAt).toLocaleDateString()}</span>
-                            <span class="text-muted"><i class="fa fa-user text-secondary me-1"></i> ${article.author ||
-                                'Admin'}</span>
+                            <span class="text-muted me-3"><i class="fa fa-calendar-alt text-secondary me-1"></i> ${new Date(article.createdAt).toLocaleDateString()}</span>
+                            <span class="text-muted"><i class="fa fa-user text-secondary me-1"></i> ${article.author || 'Admin'}</span>
                         </div>
                         <div>
-                            <span class="text-muted"><i class="fa fa-eye text-secondary me-1"></i> ${article.views || 0}
-                                views</span>
+                            <span class="text-muted"><i class="fa fa-eye text-secondary me-1"></i> ${article.views || 0} views</span>
                         </div>
                     </div>
 
@@ -106,17 +53,22 @@
                     <h2 class="mb-4">${article.title}</h2>
 
                     <div class="article-content">
-                        <p class="mb-4">${article.description || 'Full article content goes here. This is a detailed
-                            description of the article topic.'}</p>
+                        <p class="mb-4">${article.description || 'Full article content goes here. This is a detailed description of the article topic.'}</p>
 
-                        ${article.features && article.features.length > 0 ? `
-                        <h4 class="mb-3">Key Points</h4>
-                        <ul class="list-unstyled mb-4">
-                            ${article.features.map(feature => `
-                            <li class="mb-2"><i class="fas fa-check-circle text-secondary me-2"></i> ${feature}</li>
-                            `).join('')}
-                        </ul>
-                        ` : ''}
+                        ${(() => {
+                            if (article.features && article.features.length > 0) {
+                                return `
+                                    <h4 class="mb-3">Key Points</h4>
+                                    <ul class="list-unstyled mb-4">
+                                        ${article.features.map(feature => `
+                                            <li class="mb-2"><i class="fas fa-check-circle text-secondary me-2"></i> ${feature}</li>
+                                        `).join('')}
+                                    </ul>
+                                `;
+                            } else {
+                                return '';
+                            }
+                        })()}
                     </div>
 
                     <div class="share-article mt-5">
@@ -132,8 +84,7 @@
                     <div class="bg-light p-4 rounded mb-4">
                         <h4 class="mb-3">About the Author</h4>
                         <div class="d-flex align-items-center mb-3">
-                            <img src="/frontend/img/user.jpg" class="rounded-circle me-3"
-                                style="width: 60px; height: 60px; object-fit: cover;">
+                            <img src="/frontend/img/user.jpg" class="rounded-circle me-3" style="width: 60px; height: 60px; object-fit: cover;">
                             <div>
                                 <h6 class="mb-0">${article.author || 'Admin'}</h6>
                                 <small class="text-muted">Construction Expert</small>
@@ -190,32 +141,35 @@
                 <h2 class="display-4 text-capitalize mb-3">Related Articles</h2>
             </div>
             <div class="row g-4">
-                ${relatedArticles && relatedArticles.length > 0 ? relatedArticles.map(article => `
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
-                    <div class="blog-item h-100">
-                        <div class="blog-img">
-                            ${article.images && article.images[0] ? `
-                            <img src="${article.images[0].url}" class="img-fluid w-100" alt="${article.title}"
-                                style="height: 200px; object-fit: cover;">
-                            ` : `
-                            <img src="/frontend/img/blog-1.jpg" class="img-fluid w-100" alt="Blog"
-                                style="height: 200px; object-fit: cover;">
-                            `}
-                        </div>
-                        <div class="blog-content p-4">
-                            <div class="d-flex justify-content-between mb-3">
-                                <p class="mb-0"><i class="fa fa-calendar-check text-secondary me-1"></i> ${new
-                                    Date(article.createdAt).toLocaleDateString()}</p>
-                                <p class="mb-0"><i class="fa fa-user text-secondary me-1"></i> Admin</p>
+                ${(() => {
+                    if (relatedArticles && relatedArticles.length > 0) {
+                        return relatedArticles.map(article => `
+                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+                                <div class="blog-item h-100">
+                                    <div class="blog-img">
+                                        ${article.images && article.images[0] ? `
+                                            <img src="${article.images[0].url}" class="img-fluid w-100" alt="${article.title}" style="height: 200px; object-fit: cover;">
+                                        ` : `
+                                            <img src="/frontend/img/blog-1.jpg" class="img-fluid w-100" alt="Blog" style="height: 200px; object-fit: cover;">
+                                        `}
+                                    </div>
+                                    <div class="blog-content p-4">
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <p class="mb-0"><i class="fa fa-calendar-check text-secondary me-1"></i> ${new Date(article.createdAt).toLocaleDateString()}</p>
+                                            <p class="mb-0"><i class="fa fa-user text-secondary me-1"></i> Admin</p>
+                                        </div>
+                                        <a href="/articles/${article.id}" class="h4 d-block mb-4">${article.title}</a>
+                                        <a class="btn btn-secondary py-2 px-4" href="/articles/${article.id}">Read More</a>
+                                    </div>
+                                </div>
                             </div>
-                            <a href="/articles/${article.id}" class="h4 d-block mb-4">${article.title}</a>
-                            <a class="btn btn-secondary py-2 px-4" href="/articles/${article.id}">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                `).join('') : ''}
+                        `).join('');
+                    } else {
+                        return '';
+                    }
+                })()}
             </div>
         </div>
     </div>
     <!-- Related Articles End -->
-    ` }) %>
+` }) %>

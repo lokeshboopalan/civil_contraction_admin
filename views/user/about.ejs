@@ -1,68 +1,11 @@
-<%- include('../layouts/frontend', { title: title, currentPage: currentPage, body: ` <!-- Spinner Start -->
-    <div id="spinner"
-        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+<%- include('../layouts/frontend', { title: title, currentPage: currentPage, body: `
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
         </div>
     </div>
     <!-- Spinner End -->
-
-    <!-- Topbar Start -->
-    <div class="container-fluid topbar d-none d-xl-block w-100">
-        <div class="row gx-0 align-items-center" style="height: 45px;">
-            <div class="col-lg-6 text-center text-lg-start mb-lg-0">
-                <div class="d-flex flex-wrap">
-                    <a href="#" class="text-muted me-4"><i class="fas fa-map-marker-alt text-secondary me-2"></i>Find A
-                        Location</a>
-                    <a href="#" class="text-muted me-4"><i
-                            class="fas fa-phone-alt text-secondary me-2"></i>+01234567890</a>
-                    <a href="#" class="text-muted me-0"><i
-                            class="fas fa-envelope text-secondary me-2"></i>Example@gmail.com</a>
-                </div>
-            </div>
-            <div class="col-lg-6 text-center text-lg-end">
-                <div class="d-flex align-items-center justify-content-end">
-                    <a href="#" class="text-muted me-3"><i class="fas fa-clock text-secondary me-2"></i>Mon - Sat 8:00 -
-                        17:30, Sunday - CLOSED</a>
-                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
-                            class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
-                            class="fab fa-twitter"></i></a>
-                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
-                            class="fab fa-instagram"></i></a>
-                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
-                            class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Topbar End -->
-
-    <!-- Navbar & Hero Start -->
-    <div class="container-fluid sticky-top px-0">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-light py-3 px-4">
-            <a href="/" class="navbar-brand p-0">
-                <h1 class="text-secondary display-6"><i class="fas fa-city text-primary me-3"></i>Thirupathi</h1>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="fa fa-bars"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav ms-auto pt-2 pt-lg-0">
-                    <a href="/" class="nav-item nav-link ${currentPage === 'home' ? 'active' : ''}">Home</a>
-                    <a href="/about" class="nav-item nav-link ${currentPage === 'about' ? 'active' : ''}">About</a>
-                    <a href="/services"
-                        class="nav-item nav-link ${currentPage === 'services' ? 'active' : ''}">Services</a>
-                    <a href="/projects"
-                        class="nav-item nav-link ${currentPage === 'projects' ? 'active' : ''}">Projects</a>
-                    <a href="/articles" class="nav-item nav-link ${currentPage === 'articles' ? 'active' : ''}">Blog</a>
-                    <a href="/contact"
-                        class="nav-item nav-link ${currentPage === 'contact' ? 'active' : ''}">Contact</a>
-                </div>
-            </div>
-        </nav>
-    </div>
-    <!-- Navbar & Hero End -->
 
     <!-- Header Start -->
     <div class="container-fluid bg-breadcrumb">
@@ -76,100 +19,139 @@
     </div>
     <!-- Header End -->
 
-    <!-- About Start -->
-    <div class="container-fluid about py-5">
+    <!-- About Section Start -->
+    <div class="container-fluid about-modern py-5">
         <div class="container py-5">
             <div class="row g-5 align-items-center">
-                <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.1s">
-                    <div class="about-item-image d-flex">
-                        ${about.images && about.images[0] ? `
-                        <img src="${about.images[0].url}" class="img-1 img-fluid w-50" alt="${about.title}">
-                        ` : `
-                        <img src="/frontend/img/about.jpg" class="img-1 img-fluid w-50" alt="About">
-                        `}
-                        ${about.images && about.images[1] ? `
-                        <img src="${about.images[1].url}" class="img-2 img-fluid w-50" alt="${about.title}">
-                        ` : `
-                        <img src="/frontend/img/about-3.jpg" class="img-2 img-fluid w-50" alt="About">
-                        `}
-                        <div class="about-item-image-content">
-                            <img src="/frontend/img/about-1.png" class="img-fluid w-100 h-100"
-                                style="object-fit: cover;" alt="">
+                <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
+                    <div class="about-image-wrapper position-relative">
+                        <div class="about-image-main position-relative">
+                            ${about.images && about.images[0] ? `
+                                <img src="${about.images[0].url}" class="img-fluid rounded-3 shadow-lg w-100" alt="${about.title}" style="height: 500px; width: 100%; object-fit: cover;">
+                            ` : `
+                                <img src="/frontend/img/about-main.jpg" class="img-fluid rounded-3 shadow-lg w-100" alt="About" style="height: 500px; width: 100%; object-fit: cover;">
+                            `}
+                        </div>
+                        <div class="about-experience-badge position-absolute bg-primary text-white rounded-3 p-4 shadow-lg">
+                            <h2 class="display-4 fw-bold mb-0">${about.yearsOfExperience || '15'}</h2>
+                            <p class="mb-0">Years of<br>Experience</p>
+                        </div>
+                        <div class="about-image-secondary position-absolute">
+                            ${about.images && about.images[1] ? `
+                                <img src="${about.images[1].url}" class="img-fluid rounded-3 shadow-lg" alt="${about.title}" style="width: 180px; height: 180px; object-fit: cover;">
+                            ` : `
+                                <img src="/frontend/img/about-secondary.jpg" class="img-fluid rounded-3 shadow-lg" alt="About" style="width: 180px; height: 180px; object-fit: cover;">
+                            `}
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.1s">
-                    <div class="about-item-content">
-                        <p class="text-uppercase text-secondary fs-5 mb-0">${about.subtitle || 'WE ARE CONSTRUCTION
-                            COMPANY'}</p>
-                        <h2 class="display-4 text-capitalize mb-3">${about.title || 'Making your vision come true at the
-                            basics.'}</h2>
-                        <p class="mb-4 fs-5">${about.longDescription || about.shortDescription || 'Quality construction
-                            services with commitment to excellence.'}</p>
-                        <div class="pb-4 mb-4 border-bottom">
-                            <div class="row g-4">
-                                <div class="col-lg-4">
-                                    <div class="about-item-content-img">
-                                        <img src="/frontend/img/about-2.jpg" class="img-fluid w-100" alt="">
+                <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.1s">
+                    <div class="about-content">
+                        <span class="badge bg-primary text-white px-4 py-2 rounded-pill mb-3">About Company</span>
+                        <h2 class="display-4 fw-bold mb-3">${about.title || 'Building Excellence Since 2010'}</h2>
+                        <p class="lead text-secondary mb-4">${about.subtitle || 'We create exceptional spaces that inspire and endure.'}</p>
+                        <p class="text-muted mb-4">${about.longDescription || about.shortDescription || 'Thirupathi Constructions is a premier construction company dedicated to delivering quality projects with integrity, innovation, and excellence. We transform visions into reality through our commitment to craftsmanship and client satisfaction.'}</p>
+                        <div class="row g-4 mb-4">
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 bg-primary rounded-circle p-3 me-3">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M20 6L9 17L4 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="mb-1">Quality Assurance</h5>
+                                        <p class="text-muted mb-0">Highest quality standards</p>
                                     </div>
                                 </div>
-                                <div class="col-lg-8">
-                                    <div class="d-flex mb-4">
-                                        <div class="text-secondary">
-                                            <i class="fas fa-user-shield fa-3x"></i>
-                                        </div>
-                                        <h4 class="ms-3">Building quality standards</h4>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 bg-primary rounded-circle p-3 me-3">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="12" cy="12" r="10" stroke="white" stroke-width="1.5"/>
+                                            <polyline points="12 6 12 12 16 14" stroke="white" stroke-width="1.5"/>
+                                        </svg>
                                     </div>
-                                    <div class="d-flex">
-                                        <div class="text-secondary">
-                                            <i class="fas fa-users-cog fa-3x"></i>
-                                        </div>
-                                        <h4 class="ms-3">Certified engineer's team</h4>
+                                    <div class="flex-grow-1">
+                                        <h5 class="mb-1">Timely Delivery</h5>
+                                        <p class="text-muted mb-0">On-time project completion</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 bg-primary rounded-circle p-3 me-3">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M20 21V19C20 16.8 18.2 15 16 15H8C5.8 15 4 16.8 4 19V21" stroke="white" stroke-width="1.5"/>
+                                            <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="white" stroke-width="1.5"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="mb-1">Expert Team</h5>
+                                        <p class="text-muted mb-0">Skilled professionals</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 bg-primary rounded-circle p-3 me-3">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 2L15 8H9L12 2Z" fill="white"/>
+                                            <path d="M12 22L9 16H15L12 22Z" fill="white"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="mb-1">Client Satisfaction</h5>
+                                        <p class="text-muted mb-0">100% satisfaction guarantee</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row gy-0 gx-4 justify-content-between pb-4">
-                            <div class="col-lg-6">
-                                <p class="text-dark"><i class="fas fa-check text-secondary me-1"></i> 100% Satisfaction
-                                </p>
-                                <p class="text-dark"><i class="fas fa-check text-secondary me-1"></i> Trained Employees
-                                </p>
-                            </div>
-                            <div class="col-lg-6">
-                                <p class="text-dark"><i class="fas fa-check text-secondary me-1"></i> Annual Pass
-                                    Programs</p>
-                                <p class="text-dark mb-0"><i class="fas fa-check text-secondary me-1"></i> Flexible and
-                                    cost effective</p>
-                            </div>
+                        <div class="d-flex flex-wrap gap-3">
+                            <a href="/services" class="btn btn-primary rounded-pill px-5 py-3">Our Services <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; margin-left: 8px;"><path d="M5 12H19" stroke="white" stroke-width="1.5" stroke-linecap="round"/><path d="M12 5L19 12L12 19" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                            <a href="/contact" class="btn btn-outline-primary rounded-pill px-5 py-3">Contact Us</a>
                         </div>
-                        <a class="btn btn-secondary d-inline-block py-3 px-5 me-2 flex-shrink-0 wow fadeInUp"
-                            data-wow-delay="0.1s" href="/services">Our Services</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- About End -->
+    <!-- About Section End -->
 
-    <!-- Mission & Vision Start -->
-    <div class="container-fluid mission-vision py-5 bg-light">
+    <!-- Mission & Vision Section -->
+    <div class="container-fluid mission-vision-modern py-5 bg-light">
         <div class="container py-5">
-            <div class="row g-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                <span class="badge bg-primary text-white px-4 py-2 rounded-pill mb-3">Our Purpose</span>
+                <h2 class="display-4 fw-bold mb-3">Mission & Vision</h2>
+                <p class="text-muted">Driven by purpose, guided by values</p>
+            </div>
+            <div class="row g-4">
                 <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
-                    <div class="mission-vision-item text-center border p-5">
-                        <i class="fas fa-bullseye fa-4x text-secondary mb-4"></i>
+                    <div class="mission-card bg-white rounded-4 p-5 h-100 shadow-sm">
+                        <div class="icon-wrapper bg-primary bg-opacity-10 rounded-circle p-4 mb-4 d-inline-flex align-items-center justify-content-center" style="width: 90px; height: 90px;">
+                            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L15 8H9L12 2Z" fill="#0d6efd"/>
+                                <path d="M12 22L9 16H15L12 22Z" fill="#0d6efd"/>
+                                <rect x="4" y="8" width="16" height="8" rx="1" fill="#0d6efd" fill-opacity="0.3" stroke="#0d6efd" stroke-width="1.5"/>
+                                <circle cx="12" cy="12" r="2" fill="#0d6efd"/>
+                            </svg>
+                        </div>
                         <h3 class="mb-3">Our Mission</h3>
-                        <p>${about.missionStatement || 'To deliver exceptional construction services with integrity,
-                            quality, and innovation, exceeding client expectations.'}</p>
+                        <p class="text-muted mb-0">${about.missionStatement || 'To deliver exceptional construction services with integrity, quality, and innovation, exceeding client expectations and building lasting relationships.'}</p>
                     </div>
                 </div>
                 <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.2s">
-                    <div class="mission-vision-item text-center border p-5">
-                        <i class="fas fa-eye fa-4x text-secondary mb-4"></i>
+                    <div class="vision-card bg-white rounded-4 p-5 h-100 shadow-sm">
+                        <div class="icon-wrapper bg-primary bg-opacity-10 rounded-circle p-4 mb-4 d-inline-flex align-items-center justify-content-center" style="width: 90px; height: 90px;">
+                            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="3" fill="#0d6efd"/>
+                                <path d="M12 4C7.5 4 3.5 7 2 12C3.5 17 7.5 20 12 20C16.5 20 20.5 17 22 12C20.5 7 16.5 4 12 4Z" stroke="#0d6efd" stroke-width="1.5" fill="none"/>
+                            </svg>
+                        </div>
                         <h3 class="mb-3">Our Vision</h3>
-                        <p>${about.visionStatement || 'To be the most trusted and innovative construction company,
-                            setting new standards in quality and sustainability.'}</p>
+                        <p class="text-muted mb-0">${about.visionStatement || 'To be the most trusted and innovative construction company, setting new standards in quality and sustainability while transforming skylines across the nation.'}</p>
                     </div>
                 </div>
             </div>
@@ -178,53 +160,50 @@
     <!-- Mission & Vision End -->
 
     <!-- Core Values Start -->
-    <div class="container-fluid core-values py-5">
+    <div class="container-fluid core-values-modern py-5">
         <div class="container py-5">
             <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                <p class="text-uppercase text-secondary fs-5 mb-0">Our Values</p>
-                <h2 class="display-4 text-capitalize mb-3">Core Values</h2>
+                <span class="badge bg-primary text-white px-4 py-2 rounded-pill mb-3">Our Principles</span>
+                <h2 class="display-4 fw-bold mb-3">Core Values</h2>
+                <p class="text-muted">The foundation of everything we do</p>
             </div>
             <div class="row g-4">
                 <div class="col-md-4 wow fadeInUp" data-wow-delay="0.2s">
-                    <div class="core-value-item text-center p-4">
-                        <i class="fas fa-gem fa-3x text-secondary mb-3"></i>
+                    <div class="value-card text-center p-4">
+                        <div class="value-icon bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L15 8H9L12 2Z" fill="#0d6efd"/>
+                                <rect x="4" y="8" width="16" height="8" rx="1" fill="#0d6efd" fill-opacity="0.3" stroke="#0d6efd"/>
+                                <circle cx="12" cy="12" r="2" fill="#0d6efd"/>
+                            </svg>
+                        </div>
                         <h4 class="mb-3">Integrity</h4>
-                        <p>We conduct business with honesty, transparency, and ethical practices.</p>
+                        <p class="text-muted">We conduct business with honesty, transparency, and ethical practices in all our dealings.</p>
                     </div>
                 </div>
                 <div class="col-md-4 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="core-value-item text-center p-4">
-                        <i class="fas fa-medal fa-3x text-secondary mb-3"></i>
+                    <div class="value-card text-center p-4">
+                        <div class="value-icon bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="8" r="4" stroke="#0d6efd"/>
+                                <path d="M5 20V19C5 15.1 8.1 12 12 12C15.9 12 19 15.1 19 19V20" stroke="#0d6efd"/>
+                                <path d="M16 4L18 6L22 2" stroke="#0d6efd"/>
+                            </svg>
+                        </div>
                         <h4 class="mb-3">Excellence</h4>
-                        <p>We strive for excellence in every project we undertake.</p>
+                        <p class="text-muted">We strive for excellence in every project, pushing boundaries and exceeding expectations.</p>
                     </div>
                 </div>
                 <div class="col-md-4 wow fadeInUp" data-wow-delay="0.4s">
-                    <div class="core-value-item text-center p-4">
-                        <i class="fas fa-users fa-3x text-secondary mb-3"></i>
+                    <div class="value-card text-center p-4">
+                        <div class="value-icon bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="4" stroke="#0d6efd"/>
+                                <path d="M12 8L12 12L14 14" stroke="#0d6efd"/>
+                            </svg>
+                        </div>
                         <h4 class="mb-3">Client Focus</h4>
-                        <p>We prioritize client satisfaction and build lasting relationships.</p>
-                    </div>
-                </div>
-                <div class="col-md-4 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="core-value-item text-center p-4">
-                        <i class="fas fa-leaf fa-3x text-secondary mb-3"></i>
-                        <h4 class="mb-3">Sustainability</h4>
-                        <p>We commit to environmentally responsible construction practices.</p>
-                    </div>
-                </div>
-                <div class="col-md-4 wow fadeInUp" data-wow-delay="0.6s">
-                    <div class="core-value-item text-center p-4">
-                        <i class="fas fa-lightbulb fa-3x text-secondary mb-3"></i>
-                        <h4 class="mb-3">Innovation</h4>
-                        <p>We embrace innovative technologies and modern construction methods.</p>
-                    </div>
-                </div>
-                <div class="col-md-4 wow fadeInUp" data-wow-delay="0.7s">
-                    <div class="core-value-item text-center p-4">
-                        <i class="fas fa-handshake fa-3x text-secondary mb-3"></i>
-                        <h4 class="mb-3">Partnership</h4>
-                        <p>We build strong partnerships with clients, suppliers, and communities.</p>
+                        <p class="text-muted">We prioritize client satisfaction and build lasting relationships through exceptional service.</p>
                     </div>
                 </div>
             </div>
@@ -232,43 +211,89 @@
     </div>
     <!-- Core Values End -->
 
-    <!-- Features Start -->
-    <div class="container-fluid feature bg-light py-5">
+    <!-- Stats Section -->
+    <div class="container-fluid stats-section py-5 bg-primary">
         <div class="container py-5">
-            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                <p class="text-uppercase text-secondary fs-5 mb-0">Why US</p>
-                <h2 class="display-4 text-capitalize mb-3">Why Choose Us</h2>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
-                    <div class="feature-item text-center border p-5">
-                        <div class="feature-img bg-secondary d-inline-flex p-4">
-                            <i class="fas fa-city text-primary fa-5x"></i>
-                        </div>
-                        <a href="#" class="h4 d-block my-4">Expert Engineer</a>
-                        <p class="mb-0">Professional and experienced engineers dedicated to quality construction.</p>
+            <div class="row g-4 text-center">
+                <div class="col-md-3 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="stat-item">
+                        <h2 class="display-2 fw-bold text-white mb-2">${about.completedProjects || '150'}+</h2>
+                        <p class="text-white mb-0">Projects Completed</p>
                     </div>
                 </div>
-                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.4s">
-                    <div class="feature-item text-center border p-5">
-                        <div class="feature-img bg-secondary d-inline-flex p-4">
-                            <i class="fas fa-funnel-dollar text-primary fa-5x"></i>
-                        </div>
-                        <a href="#" class="h4 d-block my-4">Free Estimates</a>
-                        <p class="mb-0">Get free project estimates and consultation before starting.</p>
+                <div class="col-md-3 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="stat-item">
+                        <h2 class="display-2 fw-bold text-white mb-2">${about.happyClients || '120'}+</h2>
+                        <p class="text-white mb-0">Happy Clients</p>
                     </div>
                 </div>
-                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.6s">
-                    <div class="feature-item text-center border p-5">
-                        <div class="feature-img bg-secondary d-inline-flex p-4">
-                            <i class="fas fa-tools text-primary fa-5x"></i>
-                        </div>
-                        <a href="#" class="h4 d-block my-4">Quality Materials</a>
-                        <p class="mb-0">We use only the highest quality materials for all projects.</p>
+                <div class="col-md-3 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="stat-item">
+                        <h2 class="display-2 fw-bold text-white mb-2">${about.experiencedStaff || '50'}+</h2>
+                        <p class="text-white mb-0">Expert Staff</p>
+                    </div>
+                </div>
+                <div class="col-md-3 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="stat-item">
+                        <h2 class="display-2 fw-bold text-white mb-2">${about.yearsExperience || '15'}</h2>
+                        <p class="text-white mb-0">Years Experience</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Features End -->
-    ` }) %>
+    <!-- Stats End -->
+
+    <!-- Why Choose Us Section -->
+    <div class="container-fluid why-choose-us py-5 bg-light">
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                <span class="badge bg-primary text-white px-4 py-2 rounded-pill mb-3">Why Choose Us</span>
+                <h2 class="display-4 fw-bold mb-3">Why Thirupathi Constructions</h2>
+                <p class="text-muted">What sets us apart from the competition</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="choose-card text-center p-4 bg-white rounded-4 shadow-sm h-100">
+                        <div class="choose-icon bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 21V19C20 16.8 18.2 15 16 15H8C5.8 15 4 16.8 4 19V21" stroke="#0d6efd"/>
+                                <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="#0d6efd"/>
+                            </svg>
+                        </div>
+                        <h5 class="mb-3 fw-bold">Expert Engineers</h5>
+                        <p class="text-muted mb-0">Professional and experienced engineers dedicated to quality construction.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="choose-card text-center p-4 bg-white rounded-4 shadow-sm h-100">
+                        <div class="choose-icon bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="4" y="10" width="16" height="10" rx="2" stroke="#0d6efd"/>
+                                <path d="M12 14V16" stroke="#0d6efd"/>
+                                <path d="M8 14H16" stroke="#0d6efd"/>
+                            </svg>
+                        </div>
+                        <h5 class="mb-3 fw-bold">Free Estimates</h5>
+                        <p class="text-muted mb-0">Get free project estimates and consultation before starting.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="choose-card text-center p-4 bg-white rounded-4 shadow-sm h-100">
+                        <div class="choose-icon bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="3" stroke="#0d6efd"/>
+                                <path d="M12 3V5" stroke="#0d6efd"/>
+                                <path d="M18 6L16 8" stroke="#0d6efd"/>
+                                <path d="M6 6L8 8" stroke="#0d6efd"/>
+                            </svg>
+                        </div>
+                        <h5 class="mb-3 fw-bold">Quality Materials</h5>
+                        <p class="text-muted mb-0">We use only the highest quality materials for all projects.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Why Choose Us End -->
+` }) %>

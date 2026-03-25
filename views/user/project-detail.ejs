@@ -1,65 +1,11 @@
-<%- include('../layouts/frontend', { title: title, currentPage: currentPage, body: ` <!-- Spinner Start -->
-    <div id="spinner"
-        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+<%- include('../layouts/frontend', { title: title, currentPage: currentPage, body: `
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
         </div>
     </div>
     <!-- Spinner End -->
-
-    <!-- Topbar Start -->
-    <div class="container-fluid topbar d-none d-xl-block w-100">
-        <div class="row gx-0 align-items-center" style="height: 45px;">
-            <div class="col-lg-6 text-center text-lg-start mb-lg-0">
-                <div class="d-flex flex-wrap">
-                    <a href="#" class="text-muted me-4"><i class="fas fa-map-marker-alt text-secondary me-2"></i>Find A
-                        Location</a>
-                    <a href="#" class="text-muted me-4"><i
-                            class="fas fa-phone-alt text-secondary me-2"></i>+01234567890</a>
-                    <a href="#" class="text-muted me-0"><i
-                            class="fas fa-envelope text-secondary me-2"></i>Example@gmail.com</a>
-                </div>
-            </div>
-            <div class="col-lg-6 text-center text-lg-end">
-                <div class="d-flex align-items-center justify-content-end">
-                    <a href="#" class="text-muted me-3"><i class="fas fa-clock text-secondary me-2"></i>Mon - Sat 8:00 -
-                        17:30, Sunday - CLOSED</a>
-                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
-                            class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
-                            class="fab fa-twitter"></i></a>
-                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
-                            class="fab fa-instagram"></i></a>
-                    <a href="#" class="btn btn-primary btn-square border border-white me-3"><i
-                            class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Topbar End -->
-
-    <!-- Navbar & Hero Start -->
-    <div class="container-fluid sticky-top px-0">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-light py-3 px-4">
-            <a href="/" class="navbar-brand p-0">
-                <h1 class="text-secondary display-6"><i class="fas fa-city text-primary me-3"></i>Thirupathi</h1>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="fa fa-bars"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav ms-auto pt-2 pt-lg-0">
-                    <a href="/" class="nav-item nav-link">Home</a>
-                    <a href="/about" class="nav-item nav-link">About</a>
-                    <a href="/services" class="nav-item nav-link">Services</a>
-                    <a href="/projects" class="nav-item nav-link active">Projects</a>
-                    <a href="/articles" class="nav-item nav-link">Blog</a>
-                    <a href="/contact" class="nav-item nav-link">Contact</a>
-                </div>
-            </div>
-        </nav>
-    </div>
-    <!-- Navbar & Hero End -->
 
     <!-- Header Start -->
     <div class="container-fluid bg-breadcrumb">
@@ -79,62 +25,52 @@
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-8">
-                    ${project.images && project.images[0] ? `
-                    <div class="row g-3 mb-4">
-                        <div class="col-12">
-                            <img src="${project.images[0].url}" class="img-fluid w-100 rounded" alt="${project.title}"
-                                style="height: 450px; object-fit: cover;">
-                        </div>
-                        ${project.images.slice(1, 4).map(image => `
-                        <div class="col-md-4">
-                            <img src="${image.url}" class="img-fluid w-100 rounded" alt="${project.title}"
-                                style="height: 150px; object-fit: cover;">
-                        </div>
-                        `).join('')}
-                    </div>
-                    ` : `
-                    <img src="/frontend/img/project-detail.jpg" class="img-fluid w-100 rounded mb-4"
-                        alt="${project.title}" style="height: 450px; object-fit: cover;">
-                    `}
+                    ${(() => {
+                        if (project.images && project.images[0]) {
+                            return `
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <img src="${project.images[0].url}" class="img-fluid w-100 rounded" alt="${project.title}" style="height: 450px; object-fit: cover;">
+                                    </div>
+                                    ${project.images.slice(1, 4).map(image => `
+                                        <div class="col-md-4">
+                                            <img src="${image.url}" class="img-fluid w-100 rounded" alt="${project.title}" style="height: 150px; object-fit: cover;">
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `;
+                        } else {
+                            return `
+                                <img src="/frontend/img/project-detail.jpg" class="img-fluid w-100 rounded mb-4" alt="${project.title}" style="height: 450px; object-fit: cover;">
+                            `;
+                        }
+                    })()}
 
                     <h2 class="mb-3">${project.title}</h2>
                     <div class="d-flex flex-wrap gap-3 mb-4">
                         <span class="badge bg-primary p-2">${project.status}</span>
-                        <span class="text-muted"><i class="fas fa-calendar-alt me-2"></i>Start: ${new
-                            Date(project.startDate).toLocaleDateString()}</span>
-                        ${project.endDate ? `<span class="text-muted"><i class="fas fa-calendar-check me-2"></i>End:
-                            ${new Date(project.endDate).toLocaleDateString()}</span>` : ''}
+                        <span class="text-muted"><i class="fas fa-calendar-alt me-2"></i>Start: ${new Date(project.startDate).toLocaleDateString()}</span>
+                        ${project.endDate ? `<span class="text-muted"><i class="fas fa-calendar-check me-2"></i>End: ${new Date(project.endDate).toLocaleDateString()}</span>` : ''}
                     </div>
-                    <p class="mb-4">${project.description || 'Quality construction project delivered with excellence and
-                        commitment to client satisfaction.'}</p>
+                    <p class="mb-4">${project.description || 'Quality construction project delivered with excellence and commitment to client satisfaction.'}</p>
 
                     <div class="row mt-4">
                         <div class="col-md-6">
                             <h4 class="mb-3">Project Details</h4>
                             <ul class="list-unstyled">
-                                <li class="mb-2"><strong><i
-                                            class="fas fa-map-marker-alt text-secondary me-2"></i>Location:</strong>
-                                    ${project.location}</li>
-                                <li class="mb-2"><strong><i class="fas fa-tag text-secondary me-2"></i>Status:</strong>
-                                    <span class="badge bg-primary">${project.status}</span></li>
-                                <li class="mb-2"><strong><i class="fas fa-calendar-alt text-secondary me-2"></i>Start
-                                        Date:</strong> ${new Date(project.startDate).toLocaleDateString()}</li>
-                                ${project.endDate ? `<li class="mb-2"><strong><i
-                                            class="fas fa-calendar-check text-secondary me-2"></i>End Date:</strong>
-                                    ${new Date(project.endDate).toLocaleDateString()}</li>` : ''}
+                                <li class="mb-2"><strong><i class="fas fa-map-marker-alt text-secondary me-2"></i>Location:</strong> ${project.location}</li>
+                                <li class="mb-2"><strong><i class="fas fa-tag text-secondary me-2"></i>Status:</strong> <span class="badge bg-primary">${project.status}</span></li>
+                                <li class="mb-2"><strong><i class="fas fa-calendar-alt text-secondary me-2"></i>Start Date:</strong> ${new Date(project.startDate).toLocaleDateString()}</li>
+                                ${project.endDate ? `<li class="mb-2"><strong><i class="fas fa-calendar-check text-secondary me-2"></i>End Date:</strong> ${new Date(project.endDate).toLocaleDateString()}</li>` : ''}
                             </ul>
                         </div>
                         <div class="col-md-6">
                             <h4 class="mb-3">Key Features</h4>
                             <ul class="list-unstyled">
-                                <li class="mb-2"><i class="fas fa-check-circle text-secondary me-2"></i> Quality
-                                    Construction</li>
-                                <li class="mb-2"><i class="fas fa-check-circle text-secondary me-2"></i> Modern Design
-                                </li>
-                                <li class="mb-2"><i class="fas fa-check-circle text-secondary me-2"></i> Premium
-                                    Materials</li>
-                                <li class="mb-2"><i class="fas fa-check-circle text-secondary me-2"></i> Timely Delivery
-                                </li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-secondary me-2"></i> Quality Construction</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-secondary me-2"></i> Modern Design</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-secondary me-2"></i> Premium Materials</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-secondary me-2"></i> Timely Delivery</li>
                             </ul>
                         </div>
                     </div>
@@ -152,30 +88,34 @@
                         </div>
                         <div class="mb-3">
                             <i class="fas fa-clock text-secondary me-2"></i>
-                            <strong>Duration:</strong> ${project.endDate ? `${Math.ceil((new Date(project.endDate) - new
-                            Date(project.startDate)) / (1000 * 60 * 60 * 24))} days` : 'Ongoing'}
+                            <strong>Duration:</strong> ${project.endDate ? `${Math.ceil((new Date(project.endDate) - new Date(project.startDate)) / (1000 * 60 * 60 * 24))} days` : 'Ongoing'}
                         </div>
                         <hr>
                         <a href="/contact" class="btn btn-secondary w-100 py-3">Request Similar Project</a>
                     </div>
 
                     <!-- Gallery Images -->
-                    ${project.images && project.images.length > 1 ? `
-                    <div class="bg-light p-4 rounded mt-4">
-                        <h4 class="mb-3">Project Gallery</h4>
-                        <div class="row g-2">
-                            ${project.images.map(image => `
-                            <div class="col-4">
-                                <img src="${image.url}" class="img-fluid rounded" alt="Gallery"
-                                    style="height: 80px; width: 100%; object-fit: cover;">
-                            </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                    ` : ''}
+                    ${(() => {
+                        if (project.images && project.images.length > 1) {
+                            return `
+                                <div class="bg-light p-4 rounded mt-4">
+                                    <h4 class="mb-3">Project Gallery</h4>
+                                    <div class="row g-2">
+                                        ${project.images.map(image => `
+                                            <div class="col-4">
+                                                <img src="${image.url}" class="img-fluid rounded" alt="Gallery" style="height: 80px; width: 100%; object-fit: cover;">
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            return '';
+                        }
+                    })()}
                 </div>
             </div>
         </div>
     </div>
     <!-- Project Detail End -->
-    ` }) %>
+` }) %>
