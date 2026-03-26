@@ -42,38 +42,59 @@ export class AuthController {
     });
   }
 
-  @Post('login')
-  async login(@Body() loginDto: LoginDto, @Res() res: Response) {
-    try {
-      console.log('Login attempt for email:', loginDto.email);
+@Post('login')
+async login(@Body() loginDto: LoginDto, @Res() res: Response) {
+  try {
+    console.log('=================================');
+    console.log('🔐 LOGIN ATTEMPT');
+    console.log('=================================');
+    console.log('Email:', loginDto.email);
+    console.log('Password provided:', !!loginDto.password);
 
-      const result = await this.authService.login(loginDto);
+    const result = await this.authService.login(loginDto);
+    
+    console.log('✅ Authentication successful');
+    console.log('User ID:', result.user?.id);
+    console.log('Token generated, length:', result.access_token?.length);
 
-      // Detect if we're in production (HTTPS)
-      const isProduction = process.env.NODE_ENV === 'production';
+    // Detect if we're in production (HTTPS)
+    const isProduction = process.env.NODE_ENV === 'production';
+    
+    console.log('Cookie settings:', {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: isProduction ? 'none' : 'lax',
+      path: '/',
+      secure: isProduction,
+      environment: isProduction ? 'production' : 'development'
+    });
 
-      res.cookie('access_token', result.access_token, {
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
-        sameSite: isProduction ? 'none' : 'lax', // 'none' for cross-site requests
-        path: '/',
-        secure: isProduction, // true for HTTPS (Railway), false for local
-      });
+    res.cookie('access_token', result.access_token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: isProduction ? 'none' : 'lax',
+      path: '/',
+      secure: isProduction,
+    });
 
-      return res.status(HttpStatus.OK).json({
-        success: true,
-        message: 'Login successful!',
-        redirect: '/admin/dashboard',
-        user: result.user,
-      });
-    } catch (error) {
-      console.error('Login error:', error.message);
-      return res.status(HttpStatus.UNAUTHORIZED).json({
-        success: false,
-        message: error.message || 'Invalid email or password',
-      });
-    }
+    console.log('✅ Cookie set in response');
+    console.log('=================================\n');
+
+    return res.status(HttpStatus.OK).json({
+      success: true,
+      message: 'Login successful!',
+      redirect: '/admin/dashboard',
+      user: result.user,
+    });
+  } catch (error) {
+    console.error('❌ Login error:', error.message);
+    console.error('Stack:', error.stack);
+    return res.status(HttpStatus.UNAUTHORIZED).json({
+      success: false,
+      message: error.message || 'Invalid email or password',
+    });
   }
+}
 
   // REMOVED: @Get('profile') endpoint - now handled by ProfileController
 
