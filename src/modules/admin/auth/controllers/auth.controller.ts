@@ -49,13 +49,18 @@ export class AuthController {
 
       const result = await this.authService.login(loginDto);
 
+      const isProduction = process.env.NODE_ENV === 'production';
+
+      // Set cookie with correct settings for Railway
       res.cookie('access_token', result.access_token, {
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
-        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
         path: '/',
-        secure: false,
+        secure: isProduction, // ✅ true on Railway (HTTPS)
+        sameSite: isProduction ? 'none' : 'lax', // ✅ 'none' for cross-site
       });
+
+      console.log('Login successful, cookie set with secure:', isProduction);
 
       return res.status(HttpStatus.OK).json({
         success: true,
@@ -87,7 +92,15 @@ export class AuthController {
   @Get('logout')
   async logout(@Res() res: Response) {
     console.log('Logout endpoint accessed');
-    res.clearCookie('access_token');
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    res.clearCookie('access_token', {
+      httpOnly: true,
+      path: '/',
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+    });
+
     return res.redirect('/auth/login');
   }
 }
