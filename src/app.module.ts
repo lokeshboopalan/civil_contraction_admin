@@ -28,81 +28,75 @@ import { FrontendModule } from './modules/frontend/controllers/frontend.module';
     }),
 
     TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: async (config: ConfigService) => {
+      useFactory: async () => {
+        // Try multiple possible database URL sources
+        const databaseUrl =
+          process.env.DATABASE_URL ||
+          process.env.RAILWAY_DATABASE_URL ||
+          process.env.POSTGRES_URL;
+
         const isProduction = process.env.NODE_ENV === 'production';
-        const databaseUrl = process.env.DATABASE_URL;
 
         console.log('\n=================================');
         console.log('🔧 DATABASE CONFIGURATION');
         console.log('=================================');
+        console.log('NODE_ENV:', process.env.NODE_ENV);
+        console.log('Is Production:', isProduction);
+        console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
         console.log(
-          'Environment:',
-          isProduction ? 'PRODUCTION (Railway)' : 'DEVELOPMENT (Local)',
+          'RAILWAY_DATABASE_URL exists:',
+          !!process.env.RAILWAY_DATABASE_URL,
         );
-        console.log('NODE_ENV:', process.env.NODE_ENV || 'development');
-        console.log('DATABASE_URL exists:', !!databaseUrl);
-        console.log('=================================\n');
+        console.log('Final databaseUrl exists:', !!databaseUrl);
 
-        // PRODUCTION (Railway) - Use DATABASE_URL
         if (databaseUrl) {
-          console.log(
-            '✅ Connecting to PRODUCTION database (Railway Postgres)',
-          );
-          console.log(
-            '📊 Database URL:',
-            databaseUrl.replace(/:[^:@]+@/, ':****@'),
-          );
+          console.log('✅ Using DATABASE_URL for connection');
+          const maskedUrl = databaseUrl.replace(/:[^:@]+@/, ':****@');
+          console.log('URL:', maskedUrl);
+          console.log('=================================\n');
 
           return {
             type: 'postgres',
             url: databaseUrl,
             autoLoadEntities: true,
-            synchronize: true, // ✅ CHANGE TO TRUE for first deployment
+            synchronize: true, // Create tables
             ssl: {
               rejectUnauthorized: false,
             },
-            logging: true, // Enable logging to see queries
-            retryAttempts: 10,
-            retryDelay: 3000,
-            connectTimeoutMS: 10000,
-          };
-        }
-
-        // DEVELOPMENT (Local) - Use individual config variables
-        if (!isProduction) {
-          const dbConfig = {
-            host: config.get('database.host') || 'localhost',
-            port: config.get('database.port') || 5432,
-            username: config.get('database.username') || 'postgres',
-            password: config.get('database.password') || 'postgres',
-            database: config.get('database.name') || 'constraction_management',
-          };
-
-          console.log('✅ Connecting to DEVELOPMENT database (Local Postgres)');
-          console.log('📊 Database config:', {
-            ...dbConfig,
-            password: '****',
-          });
-
-          return {
-            type: 'postgres',
-            host: dbConfig.host,
-            port: dbConfig.port,
-            username: dbConfig.username,
-            password: dbConfig.password,
-            database: dbConfig.database,
-            autoLoadEntities: true,
-            synchronize: true,
             logging: true,
             retryAttempts: 5,
-            retryDelay: 2000,
+            retryDelay: 3000,
           };
         }
 
-        // Fallback
-        console.log('⚠️ Using FALLBACK database configuration');
-        throw new Error('No valid database configuration found');
+        // If we're in production but no database URL, throw a clear error
+        if (isProduction) {
+          console.error('❌ ERROR: No DATABASE_URL found in production!');
+          console.error(
+            'Available environment variables:',
+            Object.keys(process.env),
+          );
+          console.error('=================================\n');
+          throw new Error(
+            'DATABASE_URL is required in production. Please link your PostgreSQL service.',
+          );
+        }
+
+        // Development fallback
+        console.log('⚠️ No DATABASE_URL found, using local PostgreSQL');
+        console.log('=================================\n');
+
+        return {
+          type: 'postgres',
+          host: 'localhost',
+          port: 5432,
+          username: 'postgres',
+          password: 'postgres',
+          database: 'constraction_management',
+          autoLoadEntities: true,
+          synchronize: true,
+          logging: true,
+        };
       },
     }),
     AuthModule,
