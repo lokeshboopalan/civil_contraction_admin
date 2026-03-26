@@ -23,91 +23,50 @@ import { FrontendModule } from './modules/frontend/controllers/frontend.module';
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
-      envFilePath: ['.env', '.env.development', '.env.production'],
       ignoreEnvFile: process.env.NODE_ENV === 'production',
     }),
 
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => {
-        const isProduction = process.env.NODE_ENV === 'production';
-        const databaseUrl = process.env.DATABASE_URL;
-        
-        console.log('\n=================================');
-        console.log('🔧 DATABASE CONFIGURATION');
-        console.log('=================================');
-        console.log('Environment:', isProduction ? 'PRODUCTION (Railway)' : 'DEVELOPMENT (Local)');
-        console.log('NODE_ENV:', process.env.NODE_ENV || 'development');
-        console.log('DATABASE_URL exists:', !!databaseUrl);
-        console.log('=================================\n');
-        
-        // PRODUCTION (Railway) - Use DATABASE_URL
-        if (isProduction && databaseUrl) {
-          console.log('✅ Connecting to PRODUCTION database (Railway Postgres)');
-          console.log('📊 Database URL:', databaseUrl.replace(/:[^:@]+@/, ':****@'));
-          
-          return {
-            type: 'postgres',
-            url: databaseUrl,
-            autoLoadEntities: true,
-            synchronize: false, // CRITICAL: false in production!
-            ssl: {
-              rejectUnauthorized: false, // Required for Railway
-            },
-            logging: ['error', 'warn', 'info'], // Log important events
-            retryAttempts: 10,
-            retryDelay: 3000,
-            connectTimeoutMS: 10000,
-            extra: {
-              max: 20, // Maximum number of clients in pool
-              idleTimeoutMillis: 30000,
-            },
-          };
+        // Debug logging
+        console.log('=== Database Connection Debug ===');
+        console.log('NODE_ENV:', process.env.NODE_ENV);
+        console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
+
+        if (process.env.DATABASE_URL) {
+          console.log('DATABASE_URL found in environment');
+        } else {
+          console.log(
+            'DATABASE_URL NOT found in environment, using hardcoded URL',
+          );
         }
-        
-        // DEVELOPMENT (Local) - Use individual config variables
-        if (!isProduction) {
-          const dbConfig = {
-            host: config.get('database.host'),
-            port: config.get('database.port'),
-            username: config.get('database.username'),
-            password: config.get('database.password'),
-            database: config.get('database.name'),
-          };
-          
-          console.log('✅ Connecting to DEVELOPMENT database (Local Postgres)');
-          console.log('📊 Database config:', {
-            ...dbConfig,
-            password: '****', // Hide password in logs
-          });
-          
-          return {
-            type: 'postgres',
-            host: dbConfig.host,
-            port: dbConfig.port,
-            username: dbConfig.username,
-            password: dbConfig.password,
-            database: dbConfig.database,
-            autoLoadEntities: true,
-            synchronize: true, // Auto-sync in development for convenience
-            logging: true, // Log all queries in development
-            retryAttempts: 5,
-            retryDelay: 2000,
-          };
-        }
-        
-        // Fallback (should not reach here, but just in case)
-        console.log('⚠️ Using FALLBACK database configuration');
+        console.log('================================');
+
+        // HARDCODED RAILWAY URL - Use this for now
+        const hardcodedUrl =
+          'postgresql://postgres:UHhUupohIQHzQZiuZWUcBahTHmNVfujL@caboose.proxy.rlwy.net:12471/railway';
+
+        // Try to get from environment, fallback to hardcoded
+        const databaseUrl = process.env.DATABASE_URL || hardcodedUrl;
+
+        console.log(
+          '✅ Using database URL:',
+          databaseUrl.replace(/:[^:@]+@/, ':****@'),
+        );
+
         return {
           type: 'postgres',
-          host: 'localhost',
-          port: 5432,
-          username: 'postgres',
-          password: 'postgres',
-          database: 'constraction_management',
+          url: databaseUrl,
           autoLoadEntities: true,
-          synchronize: true,
+          synchronize: true, // Set to true to create tables
+          ssl: {
+            rejectUnauthorized: false,
+          },
           logging: true,
+          retryAttempts: 10,
+          retryDelay: 3000,
+          connectTimeoutMS: 10000,
         };
       },
     }),
@@ -127,61 +86,17 @@ export class AppModule implements OnModuleInit {
 
   async onModuleInit() {
     try {
-      const isProduction = process.env.NODE_ENV === 'production';
-      
-      // Test connection and get database info
+      // Test the database connection
       const result = await this.connection.query(
-        'SELECT NOW() as current_time, version() as version, current_database() as database_name',
+        'SELECT NOW() as current_time, current_database() as db_name, version() as version',
       );
-      
-      this.logger.log('\n=================================');
-      this.logger.log('✅ DATABASE CONNECTION SUCCESSFUL');
-      this.logger.log('=================================');
-      this.logger.log(`🌍 Environment: ${isProduction ? 'Production (Railway)' : 'Development (Local)'}`);
-      this.logger.log(`📊 Database name: ${result[0].database_name}`);
-      this.logger.log(`📅 Server time: ${result[0].current_time}`);
+      this.logger.log('✅ Database connected successfully!');
+      this.logger.log(`📅 Database time: ${result[0].current_time}`);
+      this.logger.log(`📊 Database name: ${result[0].db_name}`);
       this.logger.log(`🐘 PostgreSQL version: ${result[0].version}`);
-      
-      // Check existing tables in development
-      if (!isProduction) {
-        const tables = await this.connection.query(`
-          SELECT table_name 
-          FROM information_schema.tables 
-          WHERE table_schema = 'public'
-          ORDER BY table_name
-        `);
-        
-        if (tables.length > 0) {
-          this.logger.log(`📋 Found ${tables.length} tables: ${tables.map(t => t.table_name).join(', ')}`);
-        } else {
-          this.logger.warn('⚠️ No tables found. Tables will be auto-created (synchronize: true)');
-        }
-      }
-      
-      this.logger.log('=================================\n');
-      
     } catch (error) {
-      this.logger.error('\n=================================');
-      this.logger.error('❌ DATABASE CONNECTION FAILED');
-      this.logger.error('=================================');
-      this.logger.error(`Error: ${error.message}`);
-      
-      if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-        this.logger.error('\n💡 Troubleshooting tips:');
-        this.logger.error('1. Make sure PostgreSQL is running: sudo service postgresql start');
-        this.logger.error('2. Check your .env file has correct database credentials');
-        this.logger.error('3. Verify database exists: psql -U postgres -l');
-        this.logger.error('4. Test connection: psql -U postgres -d constraction_management');
-      } else {
-        this.logger.error('\n💡 Troubleshooting tips:');
-        this.logger.error('1. Check DATABASE_URL in Railway variables');
-        this.logger.error('2. Verify Postgres service is online in Railway');
-        this.logger.error('3. Check if DATABASE_URL is properly referenced');
-      }
-      this.logger.error('=================================\n');
-      
-      // Don't throw - let the app try to continue
-      // The app will still start but database features won't work
+      this.logger.error(`❌ Database connection failed: ${error.message}`);
+      this.logger.error('Please check your database configuration');
     }
   }
 
