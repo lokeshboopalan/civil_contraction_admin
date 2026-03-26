@@ -50,7 +50,7 @@ import { FrontendModule } from './modules/frontend/controllers/frontend.module';
             type: 'postgres',
             url: databaseUrl,
             autoLoadEntities: true,
-            synchronize: false, // CRITICAL: false in production!
+            synchronize: true, // CRITICAL: false in production!
             ssl: {
               rejectUnauthorized: false, // Required for Railway
             },
