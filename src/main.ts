@@ -10,8 +10,6 @@ import methodOverride from 'method-override';
 // Helper function to log routes safely
 function logRoutes(app: INestApplication) {
   const server = app.getHttpServer();
-
-  // Get the router from the server
   const router = (server as any)._events?.request?._router;
 
   if (router && router.stack) {
@@ -32,7 +30,6 @@ function logRoutes(app: INestApplication) {
   } else {
     console.log('Router not available yet');
   }
-
 }
 
 async function bootstrap() {
@@ -42,59 +39,117 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(methodOverride('_method'));
 
-  // Get the current working directory
-  const cwd = process.cwd();
-  console.log('Current working directory:', cwd);
+  // Enable CORS
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
 
-  // Your public files are in src/public
-  const publicPath = join(__dirname, '..', 'src', 'public');
-  console.log('Public directory path:', publicPath);
+  // ========== FIX STATIC FILE SERVING ==========
 
-  // Check if public directory exists
-  if (fs.existsSync(publicPath)) {
-    console.log('Public directory exists');
-    console.log('Contents:', fs.readdirSync(publicPath));
+  // Method 1: Serve files from multiple possible locations
+  const possiblePublicPaths = [
+    join(__dirname, '..', 'src', 'public'), // /backendNestjs/src/public
+    join(__dirname, 'public'), // /backendNestjs/src/public (if compiled)
+    join(process.cwd(), 'src', 'public'), // Based on working directory
+    join(process.cwd(), 'public'), // /backendNestjs/public
+  ];
 
-    // Serve static files from src/public
-    app.useStaticAssets(publicPath, {
-      prefix: '/', // This makes files accessible from root URL
-    });
-  } else {
-    console.log('Public directory does not exist at:', publicPath);
+  let publicPathFound = false;
 
-    // Try alternative path (maybe files are in public at root)
-    const altPublicPath = join(__dirname, '..', 'public');
-    console.log('Trying alternative path:', altPublicPath);
+  for (const publicPath of possiblePublicPaths) {
+    if (fs.existsSync(publicPath)) {
+      console.log(`✓ Serving static files from: ${publicPath}`);
+      console.log(`  Contents:`, fs.readdirSync(publicPath));
 
-    if (fs.existsSync(altPublicPath)) {
-      console.log('Found public at alternative path');
-      app.useStaticAssets(altPublicPath, {
-        prefix: '/',
+      // Serve static files with proper prefixes
+      app.useStaticAssets(publicPath, {
+        prefix: '/', // Serve from root: /css/style.css
       });
-    } else {
-      console.log('No public directory found anywhere!');
+
+      // Also serve from /public prefix if needed
+      app.useStaticAssets(publicPath, {
+        prefix: '/public', // Also serve from /public/css/style.css
+      });
+
+      publicPathFound = true;
+      break;
     }
   }
 
-  // Set up views
-  const viewsPath = join(__dirname, '..', 'views');
-  console.log(
-    `Views directory path: ${viewsPath} - ${fs.existsSync(viewsPath) ? 'EXISTS' : 'NOT FOUND'}`,
-  );
+  if (!publicPathFound) {
+    console.error('✗ No public directory found! Creating one...');
+    const defaultPublicPath = join(process.cwd(), 'src', 'public');
 
-  if (fs.existsSync(viewsPath)) {
+    // Create default directories
+    const directories = ['css', 'js', 'img', 'lib', 'webfonts'];
+    directories.forEach((dir) => {
+      const dirPath = join(defaultPublicPath, dir);
+      if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+        console.log(`✓ Created directory: ${dirPath}`);
+      }
+    });
+
+    app.useStaticAssets(defaultPublicPath, {
+      prefix: '/',
+    });
+    console.log(`✓ Created and serving from: ${defaultPublicPath}`);
+  }
+
+  // ========== VIEW ENGINE SETUP ==========
+  const possibleViewPaths = [
+    join(__dirname, '..', 'views'), // /backendNestjs/views
+    join(__dirname, 'views'), // /backendNestjs/src/views
+    join(process.cwd(), 'views'), // Based on working directory
+    join(process.cwd(), 'src', 'views'), // /backendNestjs/src/views
+  ];
+
+  let viewsPath: string | null = null;
+  for (const path of possibleViewPaths) {
+    if (fs.existsSync(path)) {
+      viewsPath = path;
+      console.log(`✓ Found views directory at: ${path}`);
+      break;
+    }
+  }
+
+  if (viewsPath) {
     app.setBaseViewsDir(viewsPath);
     app.setViewEngine('ejs');
+    console.log(`✓ View engine configured with base directory: ${viewsPath}`);
   } else {
-    console.log('Views directory not found!');
+    console.error('✗ Views directory not found! Creating one...');
+    const defaultViewPath = join(process.cwd(), 'views');
+
+    if (!fs.existsSync(defaultViewPath)) {
+      fs.mkdirSync(defaultViewPath, { recursive: true });
+      fs.mkdirSync(join(defaultViewPath, 'admin'), { recursive: true });
+      fs.mkdirSync(join(defaultViewPath, 'frontend'), { recursive: true });
+      console.log(`✓ Created views directory at: ${defaultViewPath}`);
+    }
+
+    app.setBaseViewsDir(defaultViewPath);
+    app.setViewEngine('ejs');
+    console.log(
+      `✓ View engine configured with base directory: ${defaultViewPath}`,
+    );
   }
+
+  // Log all static file paths for debugging
+  console.log('\n=== Static File Serving Debug ===');
+  console.log('Static files should be accessible at:');
+  console.log('  - http://localhost:3000/css/style.css');
+  console.log('  - http://localhost:3000/js/main.js');
+  console.log('  - http://localhost:3000/img/logo.png');
+  console.log('================================\n');
 
   await app.listen(3000);
 
   // Log routes after app is ready
   setTimeout(() => {
     logRoutes(app);
-  }, 1000); // Wait 1 second for routes to be registered
+  }, 1000);
 
   console.log(`Application is running on: http://localhost:3000`);
   console.log(`Admin dashboard: http://localhost:3000/admin/dashboard`);
