@@ -45,40 +45,36 @@ export class AuthController {
 @Post('login')
 async login(@Body() loginDto: LoginDto, @Res() res: Response) {
   try {
-    console.log('=================================');
-    console.log('🔐 LOGIN ATTEMPT');
-    console.log('=================================');
-    console.log('Email:', loginDto.email);
-    console.log('Password provided:', !!loginDto.password);
+    console.log('Login attempt for email:', loginDto.email);
 
     const result = await this.authService.login(loginDto);
-    
-    console.log('✅ Authentication successful');
-    console.log('User ID:', result.user?.id);
-    console.log('Token generated, length:', result.access_token?.length);
 
-    // Detect if we're in production (HTTPS)
     const isProduction = process.env.NODE_ENV === 'production';
     
-    console.log('Cookie settings:', {
+    // Fix: Use proper literal types for sameSite
+    const cookieOptions: {
+      httpOnly: boolean;
+      maxAge: number;
+      path: string;
+      secure: boolean;
+      sameSite: 'none' | 'lax' | 'strict'; // ✅ Explicit literal type
+      domain?: string;
+    } = {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: isProduction ? 'none' : 'lax',
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
       path: '/',
-      secure: isProduction,
-      environment: isProduction ? 'production' : 'development'
-    });
-
-    res.cookie('access_token', result.access_token, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: isProduction ? 'none' : 'lax',
-      path: '/',
-      secure: isProduction,
-    });
-
-    console.log('✅ Cookie set in response');
-    console.log('=================================\n');
+      secure: isProduction, // true in production (HTTPS), false in development
+      sameSite: isProduction ? 'none' : 'lax', // ✅ 'none' | 'lax' | 'strict'
+    };
+    
+    // Add domain for production
+    if (isProduction) {
+      cookieOptions.domain = '.railway.app';
+    }
+    
+    console.log('Setting cookie with options:', cookieOptions);
+    
+    res.cookie('access_token', result.access_token, cookieOptions);
 
     return res.status(HttpStatus.OK).json({
       success: true,
@@ -87,15 +83,13 @@ async login(@Body() loginDto: LoginDto, @Res() res: Response) {
       user: result.user,
     });
   } catch (error) {
-    console.error('❌ Login error:', error.message);
-    console.error('Stack:', error.stack);
+    console.error('Login error:', error.message);
     return res.status(HttpStatus.UNAUTHORIZED).json({
       success: false,
       message: error.message || 'Invalid email or password',
     });
   }
 }
-
   // REMOVED: @Get('profile') endpoint - now handled by ProfileController
 
   @UseGuards(JwtAuthGuard)
@@ -108,10 +102,15 @@ async login(@Body() loginDto: LoginDto, @Res() res: Response) {
     );
   }
 
-  @Get('logout')
-  async logout(@Res() res: Response) {
-    console.log('Logout endpoint accessed');
-    res.clearCookie('access_token');
-    return res.redirect('/auth/login');
-  }
+  @Post('logout')
+async logout(@Res() res: Response) {
+  res.clearCookie('access_token', {
+    httpOnly: true,
+    path: '/',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  });
+  
+  return res.redirect('/auth/login');
+}
 }

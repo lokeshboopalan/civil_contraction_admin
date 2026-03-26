@@ -38,13 +38,14 @@ function logRoutes(app: INestApplication) {
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-   app.enableCors({
-     origin:
-       process.env.NODE_ENV === 'production'
-         ? ['https://civilcontractionadmin-production.up.railway.app']
-         : true,
-     credentials: true, // Important for cookies
-   });
+ app.enableCors({
+    origin: process.env.NODE_ENV === 'production' 
+      ? 'https://civilcontractionadmin-production.up.railway.app'
+      : true, // Allow all origins in development
+    credentials: true, // ✅ IMPORTANT: Allow cookies
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  });
 
   // Use cookie parser
   app.use(cookieParser());

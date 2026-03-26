@@ -132,63 +132,65 @@
         });
 
         // Handle form submission with AJAX
-        document.getElementById('loginForm')?.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const submitText = document.getElementById('submitText');
-            const submitSpinner = document.getElementById('submitSpinner');
-            const errorAlert = document.getElementById('errorAlert');
-            const errorMessage = document.getElementById('errorMessage');
-            
-            // Disable button and show spinner
-            submitBtn.disabled = true;
-            submitText.classList.add('d-none');
-            submitSpinner.classList.remove('d-none');
-            
-            // Hide any previous error
-            errorAlert.classList.add('d-none');
-            
-            const formData = {
-                email: document.getElementById('email').value,
-                password: document.getElementById('password').value
-            };
-            
-            try {
-                const response = await fetch('/auth/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData)
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok && data.success) {
-                    // Successful login - redirect to dashboard
-                    window.location.href = data.redirect || '/admin/dashboard';
-                } else {
-                    // Show error message
-                    errorMessage.textContent = data.message || 'Invalid email or password';
-                    errorAlert.classList.remove('d-none');
-                    
-                    // Re-enable button
-                    submitBtn.disabled = false;
-                    submitText.classList.remove('d-none');
-                    submitSpinner.classList.add('d-none');
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                errorMessage.textContent = 'An error occurred. Please try again.';
-                errorAlert.classList.remove('d-none');
-                
-                // Re-enable button
-                submitBtn.disabled = false;
-                submitText.classList.remove('d-none');
-                submitSpinner.classList.add('d-none');
-            }
+      // Handle form submission with AJAX
+document.getElementById('loginForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const submitSpinner = document.getElementById('submitSpinner');
+    const errorAlert = document.getElementById('errorAlert');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    // Disable button and show spinner
+    submitBtn.disabled = true;
+    submitText.classList.add('d-none');
+    submitSpinner.classList.remove('d-none');
+    
+    // Hide any previous error
+    errorAlert.classList.add('d-none');
+    
+    const formData = {
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value
+    };
+    
+    try {
+        const response = await fetch('/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include', // ✅ ADD THIS LINE - CRITICAL FOR COOKIES
+            body: JSON.stringify(formData)
         });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+            // Successful login - redirect to dashboard
+            window.location.href = data.redirect || '/admin/dashboard';
+        } else {
+            // Show error message
+            errorMessage.textContent = data.message || 'Invalid email or password';
+            errorAlert.classList.remove('d-none');
+            
+            // Re-enable button
+            submitBtn.disabled = false;
+            submitText.classList.remove('d-none');
+            submitSpinner.classList.add('d-none');
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        errorMessage.textContent = 'An error occurred. Please try again.';
+        errorAlert.classList.remove('d-none');
+        
+        // Re-enable button
+        submitBtn.disabled = false;
+        submitText.classList.remove('d-none');
+        submitSpinner.classList.add('d-none');
+    }
+});
 
         // Auto-hide alerts after 5 seconds
         setTimeout(function() {
