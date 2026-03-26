@@ -38,6 +38,14 @@ function logRoutes(app: INestApplication) {
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+   app.enableCors({
+     origin:
+       process.env.NODE_ENV === 'production'
+         ? ['https://civilcontractionadmin-production.up.railway.app']
+         : true,
+     credentials: true, // Important for cookies
+   });
+
   // Use cookie parser
   app.use(cookieParser());
   app.use(methodOverride('_method'));

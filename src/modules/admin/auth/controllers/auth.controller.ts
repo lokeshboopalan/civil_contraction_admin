@@ -49,12 +49,15 @@ export class AuthController {
 
       const result = await this.authService.login(loginDto);
 
+      // Detect if we're in production (HTTPS)
+      const isProduction = process.env.NODE_ENV === 'production';
+
       res.cookie('access_token', result.access_token, {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
-        sameSite: 'lax',
+        sameSite: isProduction ? 'none' : 'lax', // 'none' for cross-site requests
         path: '/',
-        secure: false,
+        secure: isProduction, // true for HTTPS (Railway), false for local
       });
 
       return res.status(HttpStatus.OK).json({
