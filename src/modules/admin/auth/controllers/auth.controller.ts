@@ -42,54 +42,36 @@ export class AuthController {
     });
   }
 
-@Post('login')
-async login(@Body() loginDto: LoginDto, @Res() res: Response) {
-  try {
-    console.log('Login attempt for email:', loginDto.email);
+  @Post('login')
+  async login(@Body() loginDto: LoginDto, @Res() res: Response) {
+    try {
+      console.log('Login attempt for email:', loginDto.email);
 
-    const result = await this.authService.login(loginDto);
+      const result = await this.authService.login(loginDto);
 
-    const isProduction = process.env.NODE_ENV === 'production';
-    
-    // Fix: Use proper literal types for sameSite
-    const cookieOptions: {
-      httpOnly: boolean;
-      maxAge: number;
-      path: string;
-      secure: boolean;
-      sameSite: 'none' | 'lax' | 'strict'; // ✅ Explicit literal type
-      domain?: string;
-    } = {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      path: '/',
-      secure: isProduction, // true in production (HTTPS), false in development
-      sameSite: isProduction ? 'none' : 'lax', // ✅ 'none' | 'lax' | 'strict'
-    };
-    
-    // Add domain for production
-    if (isProduction) {
-      cookieOptions.domain = '.railway.app';
+      res.cookie('access_token', result.access_token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: 'lax',
+        path: '/',
+        secure: false,
+      });
+
+      return res.status(HttpStatus.OK).json({
+        success: true,
+        message: 'Login successful!',
+        redirect: '/admin/dashboard',
+        user: result.user,
+      });
+    } catch (error) {
+      console.error('Login error:', error.message);
+      return res.status(HttpStatus.UNAUTHORIZED).json({
+        success: false,
+        message: error.message || 'Invalid email or password',
+      });
     }
-    
-    console.log('Setting cookie with options:', cookieOptions);
-    
-    res.cookie('access_token', result.access_token, cookieOptions);
-
-    return res.status(HttpStatus.OK).json({
-      success: true,
-      message: 'Login successful!',
-      redirect: '/admin/dashboard',
-      user: result.user,
-    });
-  } catch (error) {
-    console.error('Login error:', error.message);
-    return res.status(HttpStatus.UNAUTHORIZED).json({
-      success: false,
-      message: error.message || 'Invalid email or password',
-    });
   }
-}
+
   // REMOVED: @Get('profile') endpoint - now handled by ProfileController
 
   @UseGuards(JwtAuthGuard)
@@ -102,15 +84,10 @@ async login(@Body() loginDto: LoginDto, @Res() res: Response) {
     );
   }
 
-  @Post('logout')
-async logout(@Res() res: Response) {
-  res.clearCookie('access_token', {
-    httpOnly: true,
-    path: '/',
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-  });
-  
-  return res.redirect('/auth/login');
-}
+  @Get('logout')
+  async logout(@Res() res: Response) {
+    console.log('Logout endpoint accessed');
+    res.clearCookie('access_token');
+    return res.redirect('/auth/login');
+  }
 }
