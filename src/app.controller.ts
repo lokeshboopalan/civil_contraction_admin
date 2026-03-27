@@ -148,7 +148,7 @@ export class AppController {
             <h3>👤 Admin User:</h3>
             <p class="info">${adminCreated ? '✓ New admin user created' : 'ℹ️ Admin user already existed'}</p>
             
-            <a href="/admin/login" class="btn">Click Here to Login →</a>
+            <a href="/auth/login" class="btn">Click Here to Login →</a>
           </div>
         </body>
         </html>
